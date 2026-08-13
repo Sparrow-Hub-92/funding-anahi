@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-)
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,12 +27,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const supabase = getSupabase()
+
     // Subir archivo a Supabase Storage
     const extension = archivo.name.split('.').pop()
     const timestamp = Date.now()
     const filePath = `${tipo_clase}/${timestamp}.${extension}`
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('comprobantes')
       .upload(filePath, archivo, {
         contentType: archivo.type,
