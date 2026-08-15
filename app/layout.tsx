@@ -28,10 +28,11 @@ export const metadata: Metadata = {
     siteName: 'Talento Ecuador',
     images: [
       {
-        url: 'https://talentoecuador.com/media/final-01.jpg',
+        url: 'https://talentoecuador.com/og-image.jpg',
         width: 1200,
         height: 630,
         alt: 'Talento Ecuador - Impulsando a nuestros atletas y artistas',
+        type: 'image/jpeg',
       },
     ],
     locale: 'es_EC',
@@ -42,7 +43,7 @@ export const metadata: Metadata = {
     title: 'Talento Ecuador — El impulso que nuestro talento necesita para llegar a la cima',
     description:
       'Ecuador es grande en disciplinas que merecen ser vistas. Conoce a nuestras delegaciones, participa en eventos benéficos y súmate con tu donación directa.',
-    images: ['https://talentoecuador.com/media/final-01.jpg'],
+    images: ['https://talentoecuador.com/og-image.jpg'],
   },
 }
 
