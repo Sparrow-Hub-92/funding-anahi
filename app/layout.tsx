@@ -45,6 +45,11 @@ export const metadata: Metadata = {
       'Ecuador es grande en disciplinas que merecen ser vistas. Conoce a nuestras delegaciones, participa en eventos benéficos y súmate con tu donación directa.',
     images: ['https://talentoecuador.com/og-image.jpg'],
   },
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 }
 
 export default function RootLayout({
