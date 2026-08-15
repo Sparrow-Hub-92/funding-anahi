@@ -99,50 +99,48 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── VIDEO GALLERY ─────────────────────────────────── */}
+      {/* ── PHOTO GALLERY ─────────────────────────────────── */}
       <section className="video-section" aria-label="Nuestras actuaciones">
         <div className="video-inner">
           <div className="section-header">
             <span className="section-label">Míranos en acción</span>
-            <h2 className="section-title font-display">Actuaciones anteriores</h2>
+            <h2 className="section-title font-display">En escena</h2>
             <p className="section-subtitle">
-              Estos son algunos de los momentos que nos trajeron hasta aquí.
+              Momentos capturados que muestran la pasión y el talento de nuestras bailadoras.
             </p>
           </div>
-          <div className="video-grid">
-            <div className="video-wrapper">
-              <video
-                controls
-                controlsList="nodownload"
-                playsInline
-                preload="metadata"
+          <div className="photo-gallery">
+            <div className="photo-gallery-main">
+              <Image
+                src="/media/final-01.jpg"
+                alt="Bailadoras en competencia"
+                fill
+                style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
                 onContextMenu={(e) => e.preventDefault()}
-              >
-                <source src="/media/video-01.mp4" type="video/mp4" />
-              </video>
+                draggable={false}
+              />
             </div>
-            <div className="video-wrapper">
-              <video
-                controls
-                controlsList="nodownload"
-                playsInline
-                preload="metadata"
-                onContextMenu={(e) => e.preventDefault()}
-              >
-                <source src="/media/video-02.mp4" type="video/mp4" />
-              </video>
-            </div>
-            <div className="video-wrapper video-wrapper--wide">
-              <video
-                controls
-                controlsList="nodownload"
-                playsInline
-                preload="metadata"
-                onContextMenu={(e) => e.preventDefault()}
-              >
-                <source src="/media/video-03.mov" type="video/quicktime" />
-                <source src="/media/video-03.mov" type="video/mp4" />
-              </video>
+            <div className="photo-gallery-side">
+              <div className="photo-gallery-item">
+                <Image
+                  src="/media/final-02.jpg"
+                  alt="Actuación en escenario"
+                  fill
+                  style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+                  onContextMenu={(e) => e.preventDefault()}
+                  draggable={false}
+                />
+              </div>
+              <div className="photo-gallery-item">
+                <Image
+                  src="/media/promo-03.jpg"
+                  alt="Academia I Dance"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                  onContextMenu={(e) => e.preventDefault()}
+                  draggable={false}
+                />
+              </div>
             </div>
           </div>
         </div>
