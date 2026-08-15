@@ -18,6 +18,7 @@ export async function POST(request: NextRequest) {
     const telefono = formData.get('telefono') as string
     const cantidad_personas = parseInt(formData.get('cantidad_personas') as string)
     const monto_total = parseFloat(formData.get('monto_total') as string)
+    const bailadora = formData.get('bailadora') as string
     const archivo = formData.get('comprobante') as File
 
     if (!archivo || archivo.size === 0) {
@@ -66,6 +67,7 @@ export async function POST(request: NextRequest) {
           telefono,
           cantidad_personas,
           monto_total,
+          bailadora,
           comprobante_url,
           estado: 'pendiente',
         },
