@@ -68,7 +68,7 @@ export default function HomePage() {
       {/* ── NAVBAR ──────────────────────────────────────── */}
       <nav className="navbar">
         <span className="navbar-logo">
-          I Dance <span>Ecuador</span>
+          Talento <span>Ecuador</span>
         </span>
         <button id="navbar-donar-btn" className="navbar-cta" onClick={() => setShowModal(true)}>
           Donar
@@ -115,24 +115,28 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── STORY ─────────────────────────────────────────── */}
-      <section className="story-section" aria-label="Nuestra historia">
+      {/* ── STORY / MANIFESTO ─────────────────────────────── */}
+      <section className="story-section" aria-label="Nuestro propósito">
         <div className="story-inner">
           <div className="story-text">
-            <h2 className="font-display">Un sueño que merece hacerse realidad</h2>
+            <span className="section-label" style={{ textAlign: 'left' }}>Nuestro propósito</span>
+            <h2 className="font-display">El impulso que nuestro talento necesita</h2>
             <p>
-              I Dance Ecuador es una academia con bailadoras de distintas edades y niveles.
-              Este año, las mejores de cada categoría —grupos, dúos y solistas— fueron
-              seleccionadas para representar a Ecuador en una competencia internacional en Perú.
+              Ecuador tiene talento de sobra en escenarios y disciplinas que casi nunca salen
+              en televisión. Detrás de cada medalla en baile deportivo, gimnasia, artes marciales
+              o atletismo, hay deportistas, academias y familias cubriendo pasajes, uniformes y
+              entrenamientos a puro esfuerzo propio. Hoy, es la academia <strong>I Dance</strong> con
+              algunos de los mejores bailadores de Ecuador.
             </p>
             <p>
-              Su destino: la <strong>PLF Latin Dance World Competition</strong>, la competencia
-              de baile más importante de toda Sudamérica. Han invertido meses de ensayos,
-              sacrificio y pasión. Ahora necesitan apoyo para cubrir los costos del viaje.
+              <strong>TalentoEcuador.com</strong> nace como un puente transparente entre la pasión
+              de nuestros representantes y la gente que cree en ellos. Un espacio para visibilizar
+              sus logros, centralizar eventos de recaudación y recibir apoyo directo para que la
+              falta de presupuesto nunca apague el sueño de subir al podio internacional.
             </p>
             <p>
-              Únete a nuestra causa: compra una entrada a los talleres solidarios o haz una
-              donación directa. Todo suma.
+              Súmate a nuestra causa: asiste a los talleres solidarios o realiza una donación
+              directa para acompañarlas en su camino a la <strong>PLF Latin Dance World Competition</strong> en Perú.
             </p>
             <div className="story-flags">
               <span>🇪🇨</span>
