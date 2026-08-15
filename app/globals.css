@@ -1079,6 +1079,92 @@ h1, h2, h3 {
 }
 
 /* ============================================================
+   CAPACITY BAR
+   ============================================================ */
+.event-card-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.cap-bar-wrap {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-top: none;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  padding: 0.75rem 1rem;
+}
+
+.cap-bar-track {
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 99px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.cap-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.8s ease;
+}
+
+.cap-bar--green { background: #4CAF50; }
+.cap-bar--amber { background: #FF9800; }
+.cap-bar--red   { background: #f44336; }
+
+.cap-bar-labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.cap-bar-count strong {
+  color: var(--color-text);
+}
+
+.cap-bar-warning {
+  color: #FF9800;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+.cap-bar-full {
+  color: #f44336;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+/* Form cupos */
+.form-cupos {
+  background: var(--color-surface-warm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-cupos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.form-cupos-count strong {
+  color: var(--color-text);
+  font-size: 0.95rem;
+}
+
+.form-cupos .cap-bar-track {
+  margin-bottom: 0;
+}
+
+/* ============================================================
    VIDEO GALLERY
    ============================================================ */
 .video-section {

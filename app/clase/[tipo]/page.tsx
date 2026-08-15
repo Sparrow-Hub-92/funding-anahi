@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -44,10 +44,10 @@ const CLASES: Record<
     hora: '16:00',
     lugar: 'Academia I Dance',
     mapsUrl: 'https://share.google/rvt1F4rhEEZoeneVk',
-    precio: 3,
+    precio: 5,
     imagen: '/media/promo-01.jpg',
     descripcion:
-      'Una clase especial de ritmos mixtos donde vivirás la energía del baile junto a nuestras bailadoras. Todo lo recaudado va directo al fondo para representar a Ecuador en Perú.',
+      'Una clase especial de ritmos mixtos donde vivirás la energía del baile junto a nuestras bailadoras. Todo lo recaudado va directo al fondo para ir a la PLF Latin Dance World Competition en Perú.',
   },
   'clase-2': {
     titulo: 'Taller de Baile Solidario',
@@ -56,10 +56,10 @@ const CLASES: Record<
     hora: '16:00',
     lugar: 'Academia I Dance',
     mapsUrl: 'https://share.google/rvt1F4rhEEZoeneVk',
-    precio: 3,
+    precio: 5,
     imagen: '/media/promo-02.jpg',
     descripcion:
-      'Una tarde llena de movimiento, música y alegría. Aprende ritmos mixtos con nuestras instructoras y sé parte del viaje de estas increíbles bailadoras.',
+      'Una tarde llena de movimiento, música y alegría. Aprende ritmos mixtos con nuestras instructoras y apoya el sueño de estas bailadoras de llegar a la PLF Latin Dance World Competition.',
   },
 }
 
@@ -79,6 +79,23 @@ export default function ClasePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [apiError, setApiError] = useState('')
+  const [cupos, setCupos] = useState<{ ocupados: number; capacidad: number } | null>(null)
+
+  const fetchCupos = useCallback(async () => {
+    try {
+      const res = await fetch('/api/cupos', { cache: 'no-store' })
+      if (res.ok) {
+        const data = await res.json()
+        setCupos(data[tipo])
+      }
+    } catch { /* silent */ }
+  }, [tipo])
+
+  useEffect(() => {
+    fetchCupos()
+    const interval = setInterval(fetchCupos, 20_000)
+    return () => clearInterval(interval)
+  }, [fetchCupos])
 
   if (!clase) {
     return (
@@ -178,6 +195,28 @@ export default function ClasePage() {
           />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(44,36,32,0.55) 0%, transparent 60%)' }} />
         </div>
+
+        {/* Capacity display */}
+        {cupos && (
+          <div className="form-cupos">
+            <div className="form-cupos-header">
+              <span>Disponibilidad en tiempo real</span>
+              <span className="form-cupos-count">
+                <strong>{cupos.capacidad - cupos.ocupados}</strong> cupos libres de {cupos.capacidad}
+              </span>
+            </div>
+            <div className="cap-bar-track">
+              <div
+                className={`cap-bar-fill ${
+                  (cupos.ocupados / cupos.capacidad) >= 0.8 ? 'cap-bar--red'
+                  : (cupos.ocupados / cupos.capacidad) >= 0.5 ? 'cap-bar--amber'
+                  : 'cap-bar--green'
+                }`}
+                style={{ width: `${Math.min((cupos.ocupados / cupos.capacidad) * 100, 100)}%` }}
+              />
+            </div>
+          </div>
+        )}
 
         <h1 className="form-title font-display">{clase.titulo}</h1>
 

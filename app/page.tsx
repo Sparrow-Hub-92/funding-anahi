@@ -1,11 +1,67 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import DonationModal from '@/components/DonationModal'
 
+interface CuposData {
+  ocupados: number
+  capacidad: number
+}
+
+interface CuposState {
+  'clase-1': CuposData
+  'clase-2': CuposData
+}
+
+function CapacityBar({ tipo, data }: { tipo: string; data: CuposData | undefined }) {
+  if (!data) return null
+  const { ocupados, capacidad } = data
+  const pct = Math.min((ocupados / capacidad) * 100, 100)
+  const libres = Math.max(capacidad - ocupados, 0)
+  const colorClass = pct >= 80 ? 'cap-bar--red' : pct >= 50 ? 'cap-bar--amber' : 'cap-bar--green'
+
+  return (
+    <div className="cap-bar-wrap" aria-label={`${ocupados} de ${capacidad} cupos ocupados`}>
+      <div className="cap-bar-track">
+        <div
+          className={`cap-bar-fill ${colorClass}`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+      <div className="cap-bar-labels">
+        <span className="cap-bar-count">
+          <strong>{ocupados}</strong> / {capacidad} cupos
+        </span>
+        {libres <= 10 && libres > 0 && (
+          <span className="cap-bar-warning">⚠️ ¡Solo {libres} disponibles!</span>
+        )}
+        {libres === 0 && (
+          <span className="cap-bar-full">🔴 ¡Agotado!</span>
+        )}
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage() {
   const [showModal, setShowModal] = useState(false)
+  const [cupos, setCupos] = useState<CuposState | null>(null)
+
+  const fetchCupos = useCallback(async () => {
+    try {
+      const res = await fetch('/api/cupos', { cache: 'no-store' })
+      if (res.ok) setCupos(await res.json())
+    } catch {
+      // fail silently
+    }
+  }, [])
+
+  useEffect(() => {
+    fetchCupos()
+    const interval = setInterval(fetchCupos, 30_000)
+    return () => clearInterval(interval)
+  }, [fetchCupos])
 
   return (
     <>
@@ -33,14 +89,14 @@ export default function HomePage() {
           />
         </div>
         <div className="hero-content">
-          <div className="hero-badge">🇪🇨 Ecuador → 🇵🇪 Perú 2025</div>
+          <div className="hero-badge">🇪🇨 Ecuador → 🇵🇪 PLF Latin Dance World Competition</div>
           <h1 className="hero-title">
             Ayúdanos a llevar nuestro <em>talento</em> a Perú
           </h1>
           <p className="hero-subtitle">
-            Las mejores bailadoras de I Dance Ecuador han sido seleccionadas para competir
-            internacionalmente en Perú. Grupos, dúos y solistas de distintas categorías y edades.
-            Cada aporte nos acerca al escenario.
+            Las mejores bailadoras de I Dance Ecuador han sido seleccionadas para competir en la
+            <strong> PLF Latin Dance World Competition</strong> — la competencia de baile más
+            importante de Sudamérica. Grupos, dúos y solistas de distintas categorías y edades.
           </p>
           <div className="hero-actions">
             <button id="hero-donar-btn" className="btn-primary" onClick={() => setShowModal(true)}>
@@ -70,9 +126,9 @@ export default function HomePage() {
               seleccionadas para representar a Ecuador en una competencia internacional en Perú.
             </p>
             <p>
-              Han invertido meses de ensayos, sacrificio y pasión. Ahora necesitan apoyo para
-              cubrir los costos del viaje y hacer realidad este sueño. Cada dólar que aportas
-              va directo al fondo de viaje.
+              Su destino: la <strong>PLF Latin Dance World Competition</strong>, la competencia
+              de baile más importante de toda Sudamérica. Han invertido meses de ensayos,
+              sacrificio y pasión. Ahora necesitan apoyo para cubrir los costos del viaje.
             </p>
             <p>
               Únete a nuestra causa: compra una entrada a los talleres solidarios o haz una
@@ -84,7 +140,7 @@ export default function HomePage() {
                 <path d="M4 6h16M14 2l6 4-6 4"/>
               </svg>
               <span>🇵🇪</span>
-              <span>Representando a Ecuador con orgullo</span>
+              <span>PLF Latin Dance World Competition</span>
             </div>
           </div>
 
@@ -155,52 +211,58 @@ export default function HomePage() {
             <span className="section-label">Apóyanos asistiendo</span>
             <h2 className="section-title font-display">Talleres de baile solidarios</h2>
             <p className="section-subtitle">
-              Ritmos mixtos para todos los niveles. Vive una tarde de baile y apoya el sueño de nuestras bailadoras.
+              Ritmos mixtos para todos los niveles · 50 cupos por taller · Cupos en tiempo real
             </p>
           </div>
 
           <div className="events-grid">
             {/* Clase 1 — 22 ago */}
-            <a id="evento-clase1-card" href="/clase/clase-1" className="event-card" aria-label="Inscribirse al taller del 22 de agosto">
-              <Image className="event-card-img" src="/media/promo-01.jpg" alt="Taller 22 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
-              <div className="event-card-overlay" />
-              <div className="event-card-content">
-                <span className="event-card-tag">Taller 1</span>
-                <h3 className="event-card-title">Ritmos Mixtos</h3>
-                <p className="event-card-date">📅 Sábado 22 de agosto · 16:00 · Academia I Dance</p>
-                <div className="event-card-price">
-                  <strong>$3</strong>
-                  <span>por persona</span>
+            <div className="event-card-wrapper">
+              <a id="evento-clase1-card" href="/clase/clase-1" className="event-card" aria-label="Inscribirse al taller del 22 de agosto">
+                <Image className="event-card-img" src="/media/promo-01.jpg" alt="Taller 22 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                <div className="event-card-overlay" />
+                <div className="event-card-content">
+                  <span className="event-card-tag">Taller 1</span>
+                  <h3 className="event-card-title">Ritmos Mixtos</h3>
+                  <p className="event-card-date">📅 Sáb 22 de agosto · 16:00 · I Dance</p>
+                  <div className="event-card-price">
+                    <strong>$5</strong>
+                    <span>por persona</span>
+                  </div>
+                  <span className="event-card-cta">
+                    Inscribirme
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </span>
                 </div>
-                <span className="event-card-cta">
-                  Inscribirme
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </span>
-              </div>
-            </a>
+              </a>
+              <CapacityBar tipo="clase-1" data={cupos?.['clase-1']} />
+            </div>
 
             {/* Clase 2 — 29 ago */}
-            <a id="evento-clase2-card" href="/clase/clase-2" className="event-card" aria-label="Inscribirse al taller del 29 de agosto">
-              <Image className="event-card-img" src="/media/promo-02.jpg" alt="Taller 29 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
-              <div className="event-card-overlay" />
-              <div className="event-card-content">
-                <span className="event-card-tag">Taller 2</span>
-                <h3 className="event-card-title">Ritmos Mixtos</h3>
-                <p className="event-card-date">📅 Sábado 29 de agosto · 16:00 · Academia I Dance</p>
-                <div className="event-card-price">
-                  <strong>$3</strong>
-                  <span>por persona</span>
+            <div className="event-card-wrapper">
+              <a id="evento-clase2-card" href="/clase/clase-2" className="event-card" aria-label="Inscribirse al taller del 29 de agosto">
+                <Image className="event-card-img" src="/media/promo-02.jpg" alt="Taller 29 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                <div className="event-card-overlay" />
+                <div className="event-card-content">
+                  <span className="event-card-tag">Taller 2</span>
+                  <h3 className="event-card-title">Ritmos Mixtos</h3>
+                  <p className="event-card-date">📅 Sáb 29 de agosto · 16:00 · I Dance</p>
+                  <div className="event-card-price">
+                    <strong>$5</strong>
+                    <span>por persona</span>
+                  </div>
+                  <span className="event-card-cta">
+                    Inscribirme
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </span>
                 </div>
-                <span className="event-card-cta">
-                  Inscribirme
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </span>
-              </div>
-            </a>
+              </a>
+              <CapacityBar tipo="clase-2" data={cupos?.['clase-2']} />
+            </div>
           </div>
         </div>
       </section>
@@ -245,7 +307,7 @@ export default function HomePage() {
             <p className="idance-desc">
               El material fotográfico y audiovisual de esta campaña fue posible gracias a la
               academia <strong>I Dance</strong>. Si te inspiraste y quieres aprender a bailar,
-              escríbeles por WhatsApp — tienen clases para todos los niveles.
+              visita su Instagram — tienen clases para todos los niveles.
             </p>
 
             <div className="idance-styles">
@@ -275,7 +337,7 @@ export default function HomePage() {
       {/* ── FOOTER ────────────────────────────────────────── */}
       <footer className="footer">
         <p className="footer-logo">I Dance <span>Ecuador</span></p>
-        <p className="footer-tagline">Ecuador → Perú 2025</p>
+        <p className="footer-tagline">Ecuador → PLF Latin Dance World Competition · Perú 2025</p>
         <div className="footer-divider" />
         <p className="footer-bottom">
           Campaña de recaudación de fondos · Hecho con 💛 para apoyar a nuestras bailadoras
