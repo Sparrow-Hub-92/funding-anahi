@@ -307,7 +307,14 @@ export default function HomePage() {
 
           <div className="idance-content">
             <div className="idance-logo-wrap">
-              <Image src="/media/idance-logo.png" alt="I Dance Ecuador" width={280} height={130} style={{ objectFit: 'contain', width: 'auto', maxHeight: '110px' }} />
+              <Image
+                src="/media/idance-logo.svg"
+                alt="I Dance Ecuador"
+                width={360}
+                height={177}
+                style={{ width: '100%', maxWidth: '360px', height: 'auto', display: 'block' }}
+                priority
+              />
             </div>
             <p className="idance-desc">
               Conoce más de I Dance, la academia donde se forman y entrenan nuestras representantes del país.

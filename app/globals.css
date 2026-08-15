@@ -1264,7 +1264,8 @@ h1, h2, h3 {
 }
 
 .idance-logo-wrap {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.75rem;
+  max-width: 360px;
 }
 
 .idance-desc {
