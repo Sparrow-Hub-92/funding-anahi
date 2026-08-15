@@ -311,9 +311,7 @@ export default function HomePage() {
             </div>
             <h2 className="font-display idance-title">Academia I Dance</h2>
             <p className="idance-desc">
-              El material fotográfico y audiovisual de esta campaña fue posible gracias a la
-              academia <strong>I Dance</strong>. Si te inspiraste y quieres aprender a bailar,
-              visita su Instagram — tienen clases para todos los niveles.
+              Conoce más de la academia donde se forman nuestras representantes del país.
             </p>
 
             <div className="idance-styles">
