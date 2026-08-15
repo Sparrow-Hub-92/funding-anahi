@@ -1264,20 +1264,14 @@ h1, h2, h3 {
 }
 
 .idance-logo-wrap {
-  margin-bottom: 1rem;
-}
-
-.idance-title {
-  font-size: clamp(1.8rem, 3vw, 2.6rem);
-  color: var(--color-text);
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .idance-desc {
   color: var(--color-text-muted);
   line-height: 1.8;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.08rem;
+  margin-bottom: 1.75rem;
 }
 
 .idance-styles {
