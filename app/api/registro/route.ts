@@ -2,9 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
 function getSupabase() {
+  // Server-side only: uses service_role key to bypass RLS.
+  // This key is never exposed to the client (no NEXT_PUBLIC_ prefix).
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 }
 
