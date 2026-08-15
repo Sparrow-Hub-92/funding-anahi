@@ -295,14 +295,16 @@ export default function HomePage() {
               <div className="idance-img-frame">
                 <Image src="/media/final-01.jpg" alt="Bailadoras en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
+              <div className="idance-img-frame">
+                <Image src="/media/final-02.jpg" alt="Bailadoras en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+              </div>
             </div>
           </div>
 
           <div className="idance-content">
             <div className="idance-logo-wrap">
-              <Image src="/media/idance-logo.png" alt="I Dance Ecuador" width={120} height={60} style={{ objectFit: 'contain' }} />
+              <Image src="/media/idance-logo.png" alt="I Dance Ecuador" width={220} height={110} style={{ objectFit: 'contain' }} />
             </div>
-            <span className="section-label" style={{ textAlign: 'left' }}>Nuestro espacio</span>
             <h2 className="font-display idance-title">Academia I Dance</h2>
             <p className="idance-desc">
               El material fotográfico y audiovisual de esta campaña fue posible gracias a la
@@ -336,8 +338,8 @@ export default function HomePage() {
 
       {/* ── FOOTER ────────────────────────────────────────── */}
       <footer className="footer">
-        <p className="footer-logo">I Dance <span>Ecuador</span></p>
-        <p className="footer-tagline">Ecuador → PLF Latin Dance World Competition · Perú 2025</p>
+        <p className="footer-logo">Talento <span>Ecuador</span></p>
+        <p className="footer-tagline">Ecuador → PLF Latin Dance World Competition · Perú 2026</p>
         <div className="footer-divider" />
         <p className="footer-bottom">
           Campaña de recaudación de fondos · Hecho con 💛 para apoyar a nuestras bailadoras

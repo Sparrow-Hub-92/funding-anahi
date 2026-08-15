@@ -15,14 +15,25 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Apoya a Nuestras Bailadoras | Ecuador a Perú 2025',
+  title: 'Talento Ecuador | Rumbo a la PLF Latin Dance World Competition',
   description:
-    'Ayúdanos a llevar a nuestro grupo de baile a competir internacionalmente en Perú, representando a Ecuador con orgullo. Dona, compra una entrada y sé parte de este sueño.',
-  keywords: 'crowdfunding, baile, Ecuador, Perú, fundraising, donación',
+    'Ayúdanos a llevar a las mejores bailadoras de Ecuador a competir internacionalmente en Perú. Dona, compra una entrada y sé parte de este sueño.',
+  keywords: 'crowdfunding, baile, Talento Ecuador, Perú, PLF, donación',
   openGraph: {
-    title: 'Apoya a Nuestras Bailadoras | Ecuador a Perú 2025',
+    title: 'Talento Ecuador | Rumbo a la PLF Latin Dance World Competition',
     description:
-      'Ayúdanos a llevar a nuestro grupo de baile a competir internacionalmente en Perú.',
+      'Ayúdanos a llevar a las mejores bailadoras de Ecuador a competir internacionalmente en Perú.',
+    url: 'https://talentoecuador.com',
+    siteName: 'Talento Ecuador',
+    images: [
+      {
+        url: 'https://talentoecuador.com/media/final-01.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Bailadoras de Talento Ecuador',
+      },
+    ],
+    locale: 'es_EC',
     type: 'website',
   },
 }
