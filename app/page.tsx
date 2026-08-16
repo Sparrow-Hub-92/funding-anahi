@@ -167,20 +167,7 @@ export default function HomePage() {
               Momentos capturados que muestran la pasión y el talento de nuestros bailarines.
             </p>
           </div>
-          <PhotoSlider
-            slides={[
-              { src: '/media/final-01.jpg', alt: 'Bailarines en competencia', position: 'center 25%' },
-              { src: '/media/final-03.jpg', alt: 'Academia I Dance', position: 'center' },
-              { src: '/media/final-04.jpg', alt: 'Presentación', position: 'center 20%' },
-              { src: '/media/final-05.jpg', alt: 'Bailarina en escenario', position: 'center top' },
-              { src: '/media/final-06.jpg', alt: 'Bailarina en pose', position: 'center top' },
-              { src: '/media/final-08.jpg', alt: 'Bailarina en pose', position: 'center top' },
-              { src: '/media/final-09.jpg', alt: 'Actuación grupal', position: 'center 30%' },
-              { src: '/media/final-10.jpg', alt: 'Competencia', position: 'center' },
-              { src: '/media/final-11.jpg', alt: 'Equipo de baile', position: 'center top' },
-            ]}
-            intervalMs={4000}
-          />
+          <PhotoSlider intervalMs={4500} />
         </div>
       </section>
 
