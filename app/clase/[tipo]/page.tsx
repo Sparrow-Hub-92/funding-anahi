@@ -39,28 +39,59 @@ const CLASES: Record<
 > = {
   'clase-1': {
     titulo: 'Taller de Baile Solidario',
-    fecha: 'Sábado 22 de agosto de 2025',
+    fecha: 'Sábado 22 de agosto de 2026',
     fechaCorta: 'Sáb 22 ago',
-    hora: '16:00',
+    hora: '16:00 a 17:00',
     lugar: 'Academia I Dance',
     mapsUrl: 'https://share.google/rvt1F4rhEEZoeneVk',
     precio: 5,
     imagen: '/media/promo-01.jpg',
     descripcion:
-      'Una clase especial de ritmos mixtos donde vivirás la energía del baile junto a nuestras bailadoras. Todo lo recaudado va directo al fondo para ir a la PLF Latin Dance World Competition en Perú.',
+      'Una clase especial de ritmos mixtos donde vivirás la energía del baile junto a nuestros bailarines. Todo lo recaudado va directo al fondo para ir a la PLF Latin Dance World Competition en Perú.',
   },
   'clase-2': {
     titulo: 'Taller de Baile Solidario',
-    fecha: 'Sábado 29 de agosto de 2025',
+    fecha: 'Sábado 29 de agosto de 2026',
     fechaCorta: 'Sáb 29 ago',
-    hora: '16:00',
+    hora: '16:00 a 17:00',
     lugar: 'Academia I Dance',
     mapsUrl: 'https://share.google/rvt1F4rhEEZoeneVk',
     precio: 5,
     imagen: '/media/promo-02.jpg',
     descripcion:
-      'Una tarde llena de movimiento, música y alegría. Aprende ritmos mixtos con nuestras instructoras y apoya el sueño de estas bailadoras de llegar a la PLF Latin Dance World Competition.',
+      'Una tarde llena de movimiento, música y alegría. Aprende ritmos mixtos con nuestros instructores y apoya el sueño de estos bailarines de llegar a la PLF Latin Dance World Competition.',
   },
+}
+
+interface CuposClase {
+  ocupados: number
+  capacidad: number
+  maxPorBailarina: number
+  cuposBailarina: Record<string, number>
+}
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+  return (
+    <button type="button" onClick={handleCopy} className="copy-btn" aria-label="Copiar número de cuenta">
+      {copied ? (
+        <>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          ¡Copiado!
+        </>
+      ) : (
+        <>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copiar número
+        </>
+      )}
+    </button>
+  )
 }
 
 export default function ClasePage() {
@@ -79,7 +110,7 @@ export default function ClasePage() {
   const [isLoading, setIsLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [apiError, setApiError] = useState('')
-  const [cupos, setCupos] = useState<{ ocupados: number; capacidad: number } | null>(null)
+  const [cupos, setCupos] = useState<CuposClase | null>(null)
 
   const fetchCupos = useCallback(async () => {
     try {
@@ -110,6 +141,24 @@ export default function ClasePage() {
 
   const monto = clase.precio * cantidad
 
+  // Compute how many cupos each bailarina has left
+  const cuposPorBailarina = cupos?.cuposBailarina ?? {}
+  const maxPorBailarina = cupos?.maxPorBailarina ?? 10
+
+  // When a bailarina is selected, limit qty to remaining cupos for that bailarina
+  const cuposUsadosBailadora = bailadora ? (cuposPorBailarina[bailadora] ?? 0) : 0
+  const cuposRestantesBailadora = Math.max(maxPorBailarina - cuposUsadosBailadora, 0)
+
+  // Adjust quantity if a bailarina is selected and current qty exceeds their available cupos
+  const maxCantidad = bailadora ? cuposRestantesBailadora : maxPorBailarina
+
+  const handleBailadoraChange = (val: string) => {
+    setBailadora(val)
+    const usados = cuposPorBailarina[val] ?? 0
+    const restantes = Math.max(maxPorBailarina - usados, 0)
+    if (cantidad > restantes) setCantidad(Math.max(restantes, 1))
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setApiError('')
@@ -119,7 +168,7 @@ export default function ClasePage() {
       return
     }
     if (!bailadora) {
-      setApiError('Por favor selecciona a qué bailadora deseas apoyar.')
+      setApiError('Por favor selecciona a qué bailarina deseas apoyar.')
       return
     }
 
@@ -173,6 +222,11 @@ export default function ClasePage() {
     )
   }
 
+  // Capacity info
+  const libres = cupos ? Math.max(cupos.capacidad - cupos.ocupados, 0) : null
+  const pct = cupos ? Math.min((cupos.ocupados / cupos.capacidad) * 100, 100) : 0
+  const barColor = pct >= 80 ? 'cap-bar--red' : pct >= 50 ? 'cap-bar--amber' : 'cap-bar--green'
+
   return (
     <div className="form-page">
       <div className="form-container">
@@ -202,18 +256,11 @@ export default function ClasePage() {
             <div className="form-cupos-header">
               <span>Disponibilidad en tiempo real</span>
               <span className="form-cupos-count">
-                <strong>{cupos.capacidad - cupos.ocupados}</strong> cupos libres de {cupos.capacidad}
+                <strong>{libres}</strong> cupos disponibles
               </span>
             </div>
             <div className="cap-bar-track">
-              <div
-                className={`cap-bar-fill ${
-                  (cupos.ocupados / cupos.capacidad) >= 0.8 ? 'cap-bar--red'
-                  : (cupos.ocupados / cupos.capacidad) >= 0.5 ? 'cap-bar--amber'
-                  : 'cap-bar--green'
-                }`}
-                style={{ width: `${Math.min((cupos.ocupados / cupos.capacidad) * 100, 100)}%` }}
-              />
+              <div className={`cap-bar-fill ${barColor}`} style={{ width: `${pct}%` }} />
             </div>
           </div>
         )}
@@ -235,13 +282,45 @@ export default function ClasePage() {
           </a>
           <span className="form-meta-item">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-            ${clase.precio} por persona · Cuenta N° 2200768515
+            ${clase.precio} por persona
           </span>
         </div>
 
         <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
           {clase.descripcion}
         </p>
+
+        {/* ── DATOS DE TRANSFERENCIA (inline en el flujo de talleres) ── */}
+        <div className="transfer-info-box">
+          <div className="transfer-info-header">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
+            </svg>
+            <span>Datos de transferencia — Talleres de baile</span>
+          </div>
+          <div className="bank-info-grid">
+            <div className="bank-info-row">
+              <span className="bank-info-label">Banco</span>
+              <span className="bank-info-value">Banco Pichincha</span>
+            </div>
+            <div className="bank-info-row">
+              <span className="bank-info-label">Tipo</span>
+              <span className="bank-info-value">Cuenta de Ahorros</span>
+            </div>
+            <div className="bank-info-row">
+              <span className="bank-info-label">Cédula</span>
+              <span className="bank-info-value">1803732328</span>
+            </div>
+            <div className="bank-info-row bank-info-row--highlight">
+              <span className="bank-info-label">N° Cuenta</span>
+              <span className="bank-info-value bank-info-value--big">2200768515</span>
+              <CopyButton text="2200768515" />
+            </div>
+          </div>
+          <p className="transfer-info-note">
+            💡 Realiza tu transferencia primero, luego adjunta el comprobante en el formulario.
+          </p>
+        </div>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-card">
@@ -265,40 +344,69 @@ export default function ClasePage() {
               </div>
             </div>
 
-            {/* Bailadora dropdown */}
+            {/* Bailadora dropdown with per-bailarina capacity blocking */}
             <div className="form-group">
               <label htmlFor="bailadora" className="form-label form-label-required">
-                ¿A qué bailadora quieres apoyar?
+                ¿A qué bailarina quieres apoyar?
               </label>
               <div className="select-wrapper">
                 <select
                   id="bailadora"
                   className="form-input form-select"
                   value={bailadora}
-                  onChange={(e) => setBailadora(e.target.value)}
+                  onChange={(e) => handleBailadoraChange(e.target.value)}
                   required
                 >
-                  <option value="">Selecciona una bailadora...</option>
-                  {bailadoras.map((b) => (
-                    <option key={b} value={b}>{b}</option>
-                  ))}
+                  <option value="">Selecciona una bailarina...</option>
+                  {bailadoras.map((b) => {
+                    const usados = cuposPorBailarina[b] ?? 0
+                    const agotada = usados >= maxPorBailarina
+                    return (
+                      <option key={b} value={b} disabled={agotada}>
+                        {b}{agotada ? ' — Cupos agotados' : usados > 0 ? ` — ${maxPorBailarina - usados} cupos restantes` : ''}
+                      </option>
+                    )
+                  })}
                 </select>
                 <svg className="select-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <polyline points="6 9 12 15 18 9"/>
                 </svg>
               </div>
+              {bailadora && cuposRestantesBailadora <= 5 && cuposRestantesBailadora > 0 && (
+                <p style={{ fontSize: '0.8rem', color: '#FF9800', marginTop: '0.4rem' }}>
+                  ⚠️ Solo quedan {cuposRestantesBailadora} cupo{cuposRestantesBailadora > 1 ? 's' : ''} para esta bailarina.
+                </p>
+              )}
+              {bailadora && cuposRestantesBailadora === 0 && (
+                <p style={{ fontSize: '0.8rem', color: 'var(--color-error)', marginTop: '0.4rem' }}>
+                  🔴 Esta bailarina ya completó sus 10 cupos.
+                </p>
+              )}
             </div>
 
-            {/* Cantidad */}
+            {/* Cantidad — limited by bailarina availability */}
             <div className="form-group">
               <label className="form-label form-label-required">Número de entradas</label>
-              <div className="qty-control">
-                <button id="qty-decrease-btn" type="button" className="qty-btn"
-                  onClick={() => setCantidad((c) => Math.max(1, c - 1))} aria-label="Disminuir">−</button>
-                <span className="qty-display" aria-live="polite">{cantidad}</span>
-                <button id="qty-increase-btn" type="button" className="qty-btn"
-                  onClick={() => setCantidad((c) => Math.min(20, c + 1))} aria-label="Aumentar">+</button>
-              </div>
+              {bailadora && maxCantidad === 0 ? (
+                <p style={{ fontSize: '0.9rem', color: 'var(--color-error)' }}>
+                  Esta bailarina no tiene cupos disponibles.
+                </p>
+              ) : (
+                <div className="qty-control">
+                  <button id="qty-decrease-btn" type="button" className="qty-btn"
+                    onClick={() => setCantidad((c) => Math.max(1, c - 1))} aria-label="Disminuir">−</button>
+                  <span className="qty-display" aria-live="polite">{cantidad}</span>
+                  <button id="qty-increase-btn" type="button" className="qty-btn"
+                    onClick={() => setCantidad((c) => Math.min(maxCantidad || maxPorBailarina, c + 1))}
+                    disabled={cantidad >= (maxCantidad || maxPorBailarina)}
+                    aria-label="Aumentar">+</button>
+                </div>
+              )}
+              {bailadora && maxCantidad > 0 && maxCantidad < maxPorBailarina && (
+                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.35rem' }}>
+                  Máximo {maxCantidad} entrada{maxCantidad > 1 ? 's' : ''} disponible{maxCantidad > 1 ? 's' : ''} para esta bailarina.
+                </p>
+              )}
             </div>
 
             {/* Total */}
@@ -311,7 +419,7 @@ export default function ClasePage() {
             <div className="form-group">
               <label className="form-label form-label-required">Comprobante de pago</label>
               <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                Transfiere a la cuenta N° <strong>2200768515</strong> (Banco Pichincha) y adjunta el comprobante aquí.
+                Adjunta el comprobante de tu transferencia a la cuenta N° <strong>2200768515</strong>.
               </p>
               <FileUpload onFileSelect={(f) => { setFile(f); if (f) setFileError('') }} error={fileError} />
             </div>
@@ -322,7 +430,7 @@ export default function ClasePage() {
               id="submit-registro-btn"
               type="submit"
               className="submit-btn"
-              disabled={isLoading || !nombre || !email || !telefono || !bailadora}
+              disabled={isLoading || !nombre || !email || !telefono || !bailadora || (bailadora ? cuposRestantesBailadora === 0 : false)}
             >
               {isLoading ? (
                 <><span className="spinner" />Enviando...</>

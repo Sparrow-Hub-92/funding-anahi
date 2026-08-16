@@ -7,6 +7,8 @@ import DonationModal from '@/components/DonationModal'
 interface CuposData {
   ocupados: number
   capacidad: number
+  maxPorBailarina?: number
+  cuposBailarina?: Record<string, number>
 }
 
 interface CuposState {
@@ -14,7 +16,7 @@ interface CuposState {
   'clase-2': CuposData
 }
 
-function CapacityBar({ tipo, data }: { tipo: string; data: CuposData | undefined }) {
+function CapacityBar({ data }: { data: CuposData | undefined }) {
   if (!data) return null
   const { ocupados, capacidad } = data
   const pct = Math.min((ocupados / capacidad) * 100, 100)
@@ -22,19 +24,16 @@ function CapacityBar({ tipo, data }: { tipo: string; data: CuposData | undefined
   const colorClass = pct >= 80 ? 'cap-bar--red' : pct >= 50 ? 'cap-bar--amber' : 'cap-bar--green'
 
   return (
-    <div className="cap-bar-wrap" aria-label={`${ocupados} de ${capacidad} cupos ocupados`}>
+    <div className="cap-bar-wrap" aria-label={`${libres} cupos disponibles de ${capacidad}`}>
       <div className="cap-bar-track">
-        <div
-          className={`cap-bar-fill ${colorClass}`}
-          style={{ width: `${pct}%` }}
-        />
+        <div className={`cap-bar-fill ${colorClass}`} style={{ width: `${pct}%` }} />
       </div>
       <div className="cap-bar-labels">
         <span className="cap-bar-count">
-          <strong>{ocupados}</strong> / {capacidad} cupos
+          <strong>{libres}</strong> cupos disponibles
         </span>
         {libres <= 10 && libres > 0 && (
-          <span className="cap-bar-warning">⚠️ ¡Solo {libres} disponibles!</span>
+          <span className="cap-bar-warning">⚠️ ¡Últimos cupos!</span>
         )}
         {libres === 0 && (
           <span className="cap-bar-full">🔴 ¡Agotado!</span>
@@ -80,7 +79,7 @@ export default function HomePage() {
         <div className="hero-bg">
           <Image
             src="/media/final-01.jpg"
-            alt="Bailadoras del grupo en competencia"
+            alt="Bailarines del grupo en competencia"
             fill
             priority
             style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
@@ -91,12 +90,13 @@ export default function HomePage() {
         <div className="hero-content">
           <div className="hero-badge">🇪🇨 Ecuador → 🇵🇪 PLF Latin Dance World Competition</div>
           <h1 className="hero-title">
-            Ayúdanos a llevar nuestro <em>talento</em> a Perú
+            Ayúdanos a llevar nuestro <em>talento</em> a la competencia de baile más importante de Sudamérica
           </h1>
           <p className="hero-subtitle">
-            Las mejores bailadoras de I Dance Ecuador han sido seleccionadas para competir en la
-            <strong> PLF Latin Dance World Competition</strong> — la competencia de baile más
-            importante de Sudamérica. Grupos, dúos y solistas de distintas categorías y edades.
+            Los mejores bailarines de I Dance Ecuador van a representar al país en la
+            <strong> PLF Latin Dance World Competition</strong>. Grupos, dúos y solistas de
+            distintas categorías y edades. Dona o asiste a uno de nuestros talleres benéficos
+            para recaudar fondos, y llevar el nombre de Ecuador por lo alto.
           </p>
           <div className="hero-actions">
             <button id="hero-donar-btn" className="btn-primary" onClick={() => setShowModal(true)}>
@@ -122,21 +122,16 @@ export default function HomePage() {
             <span className="section-label" style={{ textAlign: 'left' }}>Nuestro propósito</span>
             <h2 className="font-display">El impulso que nuestro talento necesita</h2>
             <p>
-              Ecuador tiene talento de sobra en escenarios y disciplinas que casi nunca salen
-              en televisión. Detrás de cada medalla en baile deportivo, gimnasia, artes marciales
-              o atletismo, hay deportistas, academias y familias cubriendo pasajes, uniformes y
-              entrenamientos a puro esfuerzo propio. Hoy, es la academia <strong>I Dance</strong> con
-              algunos de los mejores bailadores de Ecuador.
+              Detrás de cada medalla internacional hay deportistas y familias cubriendo viajes
+              y entrenamientos a puro esfuerzo propio.
             </p>
             <p>
-              <strong>TalentoEcuador.com</strong> nace como un puente transparente entre la pasión
-              de nuestros representantes y la gente que cree en ellos. Un espacio para visibilizar
-              sus logros, centralizar eventos de recaudación y recibir apoyo directo para que la
-              falta de presupuesto nunca apague el sueño de subir al podio internacional.
+              <strong>TalentoEcuador.com</strong> conecta a nuestros representantes con quienes
+              creemos en ellos. Hoy apoyamos a las bailarinas de I Dance en su camino a la{' '}
+              <strong>PLF Latin Dance World Competition</strong> en Perú.
             </p>
             <p>
-              Súmate a nuestra causa: asiste a los talleres solidarios o realiza una donación
-              directa para acompañarlas en su camino a la <strong>PLF Latin Dance World Competition</strong> en Perú.
+              Participa en sus talleres o súmate con una donación directa para llevarlas al podio.
             </p>
             <div className="story-flags">
               <span>🇪🇨</span>
@@ -151,7 +146,7 @@ export default function HomePage() {
           <div className="story-image-frame">
             <Image
               src="/media/final-02.jpg"
-              alt="Bailadoras en escenario"
+              alt="Bailarines en escenario"
               fill
               style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
               onContextMenu={(e) => e.preventDefault()}
@@ -168,14 +163,14 @@ export default function HomePage() {
             <span className="section-label">Míranos en acción</span>
             <h2 className="section-title font-display">En escena</h2>
             <p className="section-subtitle">
-              Momentos capturados que muestran la pasión y el talento de nuestras bailadoras.
+              Momentos capturados que muestran la pasión y el talento de nuestros bailarines.
             </p>
           </div>
           <div className="photo-gallery">
             <div className="photo-gallery-main">
               <Image
                 src="/media/final-01.jpg"
-                alt="Bailadoras en competencia"
+                alt="Bailarines en competencia"
                 fill
                 style={{ objectFit: 'cover', objectPosition: 'center 25%' }}
                 onContextMenu={(e) => e.preventDefault()}
@@ -215,7 +210,7 @@ export default function HomePage() {
             <span className="section-label">Apóyanos asistiendo</span>
             <h2 className="section-title font-display">Talleres de baile solidarios</h2>
             <p className="section-subtitle">
-              Ritmos mixtos para todos los niveles · 50 cupos por taller · Cupos en tiempo real
+              Ritmos mixtos para todos los niveles · 50 cupos por taller
             </p>
           </div>
 
@@ -228,20 +223,20 @@ export default function HomePage() {
                 <div className="event-card-content">
                   <span className="event-card-tag">Taller 1</span>
                   <h3 className="event-card-title">Ritmos Mixtos</h3>
-                  <p className="event-card-date">📅 Sáb 22 de agosto · 16:00 · I Dance</p>
+                  <p className="event-card-date">📅 Sáb 22 de agosto · 16:00 a 17:00 · I Dance</p>
                   <div className="event-card-price">
                     <strong>$5</strong>
                     <span>por persona</span>
                   </div>
                   <span className="event-card-cta">
-                    Inscribirme
+                    Inscríbete
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </span>
                 </div>
               </a>
-              <CapacityBar tipo="clase-1" data={cupos?.['clase-1']} />
+              <CapacityBar data={cupos?.['clase-1']} />
             </div>
 
             {/* Clase 2 — 29 ago */}
@@ -252,20 +247,20 @@ export default function HomePage() {
                 <div className="event-card-content">
                   <span className="event-card-tag">Taller 2</span>
                   <h3 className="event-card-title">Ritmos Mixtos</h3>
-                  <p className="event-card-date">📅 Sáb 29 de agosto · 16:00 · I Dance</p>
+                  <p className="event-card-date">📅 Sáb 29 de agosto · 16:00 a 17:00 · I Dance</p>
                   <div className="event-card-price">
                     <strong>$5</strong>
                     <span>por persona</span>
                   </div>
                   <span className="event-card-cta">
-                    Inscribirme
+                    Inscríbete
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </span>
                 </div>
               </a>
-              <CapacityBar tipo="clase-2" data={cupos?.['clase-2']} />
+              <CapacityBar data={cupos?.['clase-2']} />
             </div>
           </div>
         </div>
@@ -297,10 +292,10 @@ export default function HomePage() {
                 <Image src="/media/promo-03.jpg" alt="Academia I Dance" fill style={{ objectFit: 'cover' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
               <div className="idance-img-frame">
-                <Image src="/media/final-01.jpg" alt="Bailadoras en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+                <Image src="/media/final-01.jpg" alt="Bailarines en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
               <div className="idance-img-frame">
-                <Image src="/media/final-02.jpg" alt="Bailadoras en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+                <Image src="/media/final-02.jpg" alt="Bailarines en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
             </div>
           </div>
@@ -350,7 +345,7 @@ export default function HomePage() {
         <p className="footer-tagline">Ecuador → PLF Latin Dance World Competition · Perú 2026</p>
         <div className="footer-divider" />
         <p className="footer-bottom">
-          Campaña de recaudación de fondos · Hecho con 💛 para apoyar a nuestras bailadoras
+          Campaña de recaudación de fondos · Hecho con 💛 para apoyar a nuestros bailarines
         </p>
       </footer>
 
