@@ -290,36 +290,19 @@ export default function ClasePage() {
           {clase.descripcion}
         </p>
 
-        {/* ── DATOS DE TRANSFERENCIA (inline en el flujo de talleres) ── */}
+        {/* ── DATOS DE TRANSFERENCIA (compact strip) ── */}
         <div className="transfer-info-box">
-          <div className="transfer-info-header">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
-            </svg>
-            <span>Datos de transferencia — Talleres de baile</span>
+          <span className="transfer-info-label">Transferencia</span>
+          <div className="transfer-info-divider" />
+          <div className="transfer-info-field">
+            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.78rem' }}>Banco Pichincha · Cta. Ahorros</span>
           </div>
-          <div className="bank-info-grid">
-            <div className="bank-info-row">
-              <span className="bank-info-label">Banco</span>
-              <span className="bank-info-value">Banco Pichincha</span>
-            </div>
-            <div className="bank-info-row">
-              <span className="bank-info-label">Tipo</span>
-              <span className="bank-info-value">Cuenta de Ahorros</span>
-            </div>
-            <div className="bank-info-row">
-              <span className="bank-info-label">Cédula</span>
-              <span className="bank-info-value">1803732328</span>
-            </div>
-            <div className="bank-info-row bank-info-row--highlight">
-              <span className="bank-info-label">N° Cuenta</span>
-              <span className="bank-info-value bank-info-value--big">2200768515</span>
-              <CopyButton text="2200768515" />
-            </div>
+          <div className="transfer-info-divider" />
+          <div className="transfer-info-field">
+            <strong>2200768515</strong>
           </div>
-          <p className="transfer-info-note">
-            💡 Realiza tu transferencia primero, luego adjunta el comprobante en el formulario.
-          </p>
+          <CopyButton text="2200768515" />
+          <span className="transfer-info-note">💡 Transfiere y adjunta el comprobante</span>
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
