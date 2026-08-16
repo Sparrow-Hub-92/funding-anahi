@@ -1496,35 +1496,57 @@ img, video {
   height: 560px;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--color-text);
+  background: #15100E;
+  box-shadow: var(--shadow-lg);
 }
 
 .photo-slider-slide {
   position: absolute;
   inset: 0;
   opacity: 0;
-  transition: opacity 0.7s ease;
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .photo-slider-slide--active {
   opacity: 1;
+  pointer-events: auto;
   z-index: 1;
 }
 
-/* Ken Burns subtle zoom */
-.photo-slider-zoom {
+/* Ambient blurred background */
+.photo-slider-bg-ambient {
+  position: absolute;
+  inset: -20px;
+  z-index: 0;
+  overflow: hidden;
+  filter: blur(28px) brightness(0.42) saturate(1.25);
+  transform: scale(1.08);
+}
+
+.photo-slider-bg-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
+  background: radial-gradient(circle at center, rgba(20, 14, 10, 0.15) 0%, rgba(20, 14, 10, 0.65) 100%);
 }
 
-.photo-slider-zoom--active {
-  animation: kenburns 8s ease-out forwards;
+/* Foreground crisp image container */
+.photo-slider-foreground {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 1.5rem 3.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-@keyframes kenburns {
-  from { transform: scale(1.04); }
-  to   { transform: scale(1); }
+.photo-slider-main-img {
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.5));
 }
 
 /* Prev/Next arrows */
@@ -1536,19 +1558,21 @@ img, video {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  background: rgba(20, 14, 10, 0.55);
-  backdrop-filter: blur(6px);
+  background: rgba(20, 14, 10, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background var(--transition), transform var(--transition);
-  border: 1px solid rgba(255,255,255,0.15);
+  transition: background var(--transition), transform var(--transition), border-color var(--transition);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .photo-slider-arrow:hover {
-  background: rgba(200, 114, 74, 0.8);
-  transform: translateY(-50%) scale(1.06);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: translateY(-50%) scale(1.08);
 }
 
 .photo-slider-arrow--prev { left: 1rem; }
@@ -1564,19 +1588,29 @@ img, video {
   display: flex;
   gap: 6px;
   align-items: center;
+  padding: 6px 12px;
+  background: rgba(20, 14, 10, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .photo-slider-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
   transition: background var(--transition), transform var(--transition), width var(--transition);
   flex-shrink: 0;
 }
 
+.photo-slider-dot:hover {
+  background: rgba(255, 255, 255, 0.8);
+}
+
 .photo-slider-dot--active {
-  background: #fff;
+  background: var(--color-primary);
   width: 22px;
   border-radius: 4px;
 }
@@ -1595,7 +1629,11 @@ img, video {
   }
 
   .photo-slider {
-    height: 420px;
+    height: 480px;
+  }
+
+  .photo-slider-foreground {
+    padding: 1.25rem 2.5rem;
   }
 
   .story-inner {
@@ -1697,17 +1735,36 @@ img, video {
 
   /* Photo Slider */
   .photo-slider {
-    height: 300px;
+    height: 420px;
     border-radius: var(--radius-md);
   }
 
-  .photo-slider-arrow {
-    width: 38px;
-    height: 38px;
+  .photo-slider-foreground {
+    padding: 1rem 0.5rem 2.8rem 0.5rem;
   }
 
-  .photo-slider-arrow--prev { left: 0.6rem; }
-  .photo-slider-arrow--next { right: 0.6rem; }
+  .photo-slider-arrow {
+    width: 36px;
+    height: 36px;
+  }
+
+  .photo-slider-arrow--prev { left: 0.4rem; }
+  .photo-slider-arrow--next { right: 0.4rem; }
+
+  .photo-slider-dots {
+    bottom: 0.75rem;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+
+  .photo-slider-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .photo-slider-dot--active {
+    width: 16px;
+  }
 
   /* Events */
   .events-grid {
