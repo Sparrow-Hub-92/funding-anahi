@@ -270,10 +270,10 @@ export default function HomePage() {
           <div className="idance-image-col">
             <div className="idance-img-grid">
               <div className="idance-img-frame idance-img-frame--tall">
-                <Image src="/media/promo-03.jpg" alt="Academia I Dance" fill style={{ objectFit: 'cover' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+                <Image src="/media/final-07.jpg" alt="Bailarina solista" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
               <div className="idance-img-frame">
-                <Image src="/media/final-07.jpg" alt="Bailarina solista" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+                <Image src="/media/promo-03.jpg" alt="Academia I Dance" fill style={{ objectFit: 'cover' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
               <div className="idance-img-frame">
                 <Image src="/media/final-10.jpg" alt="Competencia" fill style={{ objectFit: 'cover', objectPosition: 'center' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
