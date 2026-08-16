@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import DonationModal from '@/components/DonationModal'
+import PhotoSlider from '@/components/PhotoSlider'
 
 interface CuposData {
   ocupados: number
@@ -156,7 +157,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── PHOTO GALLERY ───────────────────────────────── */}
+      {/* ── PHOTO SLIDER ───────────────────────────────── */}
       <section className="video-section" aria-label="Nuestras actuaciones">
         <div className="video-inner">
           <div className="section-header">
@@ -166,53 +167,22 @@ export default function HomePage() {
               Momentos capturados que muestran la pasión y el talento de nuestros bailarines.
             </p>
           </div>
-          <div className="photo-gallery photo-gallery--masonry">
-            {/* Col 1 */}
-            <div className="photo-gallery-col">
-              <div className="photo-gallery-item photo-gallery-item--tall">
-                <Image src="/media/final-08.jpg" alt="Bailarina en pose" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item">
-                <Image src="/media/final-09.jpg" alt="Actuación grupal" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item">
-                <Image src="/media/final-10.jpg" alt="Competencia" fill style={{ objectFit: 'cover', objectPosition: 'center' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-            </div>
-            {/* Col 2 */}
-            <div className="photo-gallery-col">
-              <div className="photo-gallery-item">
-                <Image src="/media/final-01.jpg" alt="Bailarines en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 25%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item photo-gallery-item--tall">
-                <Image src="/media/final-05.jpg" alt="Bailarina en escenario" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item">
-                <Image src="/media/final-04.jpg" alt="Presentación" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item photo-gallery-item--tall">
-                <Image src="/media/final-11.jpg" alt="Equipo de baile" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-            </div>
-            {/* Col 3 */}
-            <div className="photo-gallery-col">
-              <div className="photo-gallery-item">
-                <Image src="/media/final-02.jpg" alt="Actuación en escenario" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item photo-gallery-item--tall">
-                <Image src="/media/final-06.jpg" alt="Bailarina en pose" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item photo-gallery-item--tall">
-                <Image src="/media/final-07.jpg" alt="Solista" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-              <div className="photo-gallery-item">
-                <Image src="/media/final-03.jpg" alt="Academia I Dance" fill style={{ objectFit: 'cover', objectPosition: 'center' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
-              </div>
-            </div>
-          </div>
+          <PhotoSlider
+            slides={[
+              { src: '/media/final-01.jpg', alt: 'Bailarines en competencia', position: 'center 25%' },
+              { src: '/media/final-03.jpg', alt: 'Academia I Dance', position: 'center' },
+              { src: '/media/final-04.jpg', alt: 'Presentación', position: 'center 20%' },
+              { src: '/media/final-05.jpg', alt: 'Bailarina en escenario', position: 'center top' },
+              { src: '/media/final-06.jpg', alt: 'Bailarina en pose', position: 'center top' },
+              { src: '/media/final-08.jpg', alt: 'Bailarina en pose', position: 'center top' },
+              { src: '/media/final-09.jpg', alt: 'Actuación grupal', position: 'center 30%' },
+              { src: '/media/final-10.jpg', alt: 'Competencia', position: 'center' },
+              { src: '/media/final-11.jpg', alt: 'Equipo de baile', position: 'center top' },
+            ]}
+            intervalMs={4000}
+          />
         </div>
       </section>
-
 
       {/* ── EVENTS ────────────────────────────────────────── */}
       <section id="eventos" className="events-section" aria-label="Talleres solidarios">
@@ -303,10 +273,10 @@ export default function HomePage() {
                 <Image src="/media/promo-03.jpg" alt="Academia I Dance" fill style={{ objectFit: 'cover' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
               <div className="idance-img-frame">
-                <Image src="/media/final-01.jpg" alt="Bailarines en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 30%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+                <Image src="/media/final-07.jpg" alt="Bailarina solista" fill style={{ objectFit: 'cover', objectPosition: 'center top' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
               <div className="idance-img-frame">
-                <Image src="/media/final-02.jpg" alt="Bailarines en competencia" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
+                <Image src="/media/final-10.jpg" alt="Competencia" fill style={{ objectFit: 'cover', objectPosition: 'center' }} onContextMenu={(e) => e.preventDefault()} draggable={false} />
               </div>
             </div>
           </div>
