@@ -290,19 +290,40 @@ export default function ClasePage() {
           {clase.descripcion}
         </p>
 
-        {/* ── DATOS DE TRANSFERENCIA (compact strip) ── */}
-        <div className="transfer-info-box">
-          <span className="transfer-info-label">Transferencia</span>
-          <div className="transfer-info-divider" />
-          <div className="transfer-info-field">
-            <span style={{ color: 'var(--color-text-muted)', fontSize: '0.78rem' }}>Banco Pichincha · Cta. Ahorros</span>
+        {/* ── DATOS DE TRANSFERENCIA (Compact & Full Details) ── */}
+        <div className="transfer-card-compact">
+          <div className="transfer-card-header">
+            <div className="transfer-card-title">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="5" width="20" height="14" rx="2" />
+                <line x1="2" y1="10" x2="22" y2="10" />
+              </svg>
+              <span>Datos de transferencia — Talleres de baile</span>
+            </div>
+            <span className="transfer-card-hint">💡 Transfiere y adjunta tu comprobante</span>
           </div>
-          <div className="transfer-info-divider" />
-          <div className="transfer-info-field">
-            <strong>2200768515</strong>
+
+          <div className="transfer-grid-compact">
+            <div className="transfer-cell">
+              <span className="transfer-cell-label">Banco</span>
+              <span className="transfer-cell-val">Banco Pichincha</span>
+            </div>
+            <div className="transfer-cell">
+              <span className="transfer-cell-label">Tipo</span>
+              <span className="transfer-cell-val">Cuenta de Ahorros</span>
+            </div>
+            <div className="transfer-cell">
+              <span className="transfer-cell-label">Cédula</span>
+              <span className="transfer-cell-val">1803732328</span>
+            </div>
+            <div className="transfer-cell transfer-cell--account">
+              <span className="transfer-cell-label">N° de Cuenta</span>
+              <div className="transfer-acc-row">
+                <strong className="transfer-acc-num">2200768515</strong>
+                <CopyButton text="2200768515" />
+              </div>
+            </div>
           </div>
-          <CopyButton text="2200768515" />
-          <span className="transfer-info-note">💡 Transfiere y adjunta el comprobante</span>
         </div>
 
         <form onSubmit={handleSubmit} noValidate>
