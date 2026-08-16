@@ -548,33 +548,49 @@ h1, h2, h3 {
   background: var(--color-surface);
   border-radius: var(--radius-lg);
   width: 100%;
-  max-width: 560px;
+  max-width: 440px;
   max-height: 90svh;
   overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-  animation: slide-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 20px 60px rgba(44, 36, 32, 0.22);
+  border: 1px solid var(--color-border);
+  animation: slide-up 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 @keyframes slide-up {
-  from { transform: translateY(24px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from { transform: translateY(20px) scale(0.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
 .modal-header {
-  padding: 1.75rem 1.75rem 0;
+  padding: 1.25rem 1.4rem 0.25rem;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
 
+.modal-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.modal-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 .modal-header h2 {
-  font-size: 1.5rem;
+  font-size: 1.35rem;
   color: var(--color-text);
+  line-height: 1.2;
 }
 
 .modal-close {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -582,93 +598,86 @@ h1, h2, h3 {
   color: var(--color-text-muted);
   transition: background var(--transition), color var(--transition);
   flex-shrink: 0;
+  margin-top: -0.2rem;
+  margin-right: -0.2rem;
 }
 
 .modal-close:hover {
-  background: var(--color-border);
+  background: var(--color-surface-warm);
   color: var(--color-text);
 }
 
 .modal-body {
-  padding: 1.25rem 1.75rem 1.75rem;
+  padding: 0.85rem 1.4rem 1.35rem;
 }
 
-.modal-subtitle {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.bank-info-grid {
-  display: grid;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.bank-info-row {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 0.5rem;
-  padding: 0.85rem 1rem;
+/* Minimal Donation Info Card */
+.donation-info-card {
   background: var(--color-surface-warm);
-  border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1.1rem;
+  margin-bottom: 0.85rem;
 }
 
-.bank-info-label {
-  font-size: 0.78rem;
+.donation-info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.donation-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+}
+
+.donation-info-label {
+  font-size: 0.68rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
   color: var(--color-text-muted);
-  display: flex;
-  align-items: center;
+  letter-spacing: 0.04em;
 }
 
-.bank-info-value {
-  font-size: 0.95rem;
+.donation-info-val {
+  font-size: 0.88rem;
+  font-weight: 600;
   color: var(--color-text);
-  font-weight: 500;
 }
 
-.qr-section {
-  border: 2px dashed var(--color-border);
-  border-radius: var(--radius-md);
-  padding: 2rem;
-  text-align: center;
-  background: var(--color-surface-warm);
-}
-
-.qr-placeholder {
-  width: 140px;
-  height: 140px;
-  background: var(--color-border);
-  border-radius: var(--radius-sm);
-  margin: 0 auto 0.75rem;
+.donation-account-highlight {
   display: flex;
   align-items: center;
-  justify-content: center;
-  color: var(--color-text-muted);
-  font-size: 0.78rem;
-  text-align: center;
-  padding: 0.5rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
 }
 
-.qr-caption {
-  font-size: 0.82rem;
-  color: var(--color-text-muted);
+.donation-acc-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
-.modal-note {
-  margin-top: 1.25rem;
-  padding: 0.85rem 1rem;
+.donation-acc-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: 0.03em;
+}
+
+/* Minimal note */
+.modal-note-minimal {
+  padding: 0.65rem 0.85rem;
   background: var(--color-primary-light);
-  border-radius: var(--radius-md);
-  border-left: 3px solid var(--color-primary);
-  font-size: 0.87rem;
+  border-radius: var(--radius-sm);
+  border-left: 2.5px solid var(--color-primary);
+  font-size: 0.8rem;
   color: var(--color-text);
-  line-height: 1.6;
+  line-height: 1.45;
 }
 
 /* ============================================================
