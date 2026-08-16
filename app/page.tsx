@@ -146,10 +146,10 @@ export default function HomePage() {
 
           <div className="story-image-frame">
             <Image
-              src="/media/final-02.jpg"
-              alt="Bailarines en escenario"
+              src="/media/final-09.jpg"
+              alt="Bailarines de I Dance en presentación grupal"
               fill
-              style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+              style={{ objectFit: 'cover', objectPosition: 'center 30%' }}
               onContextMenu={(e) => e.preventDefault()}
               draggable={false}
             />
