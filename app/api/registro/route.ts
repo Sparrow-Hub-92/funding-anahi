@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     const tipo_clase = (formData.get('tipo_clase') as string)?.trim()
     const nombre = (formData.get('nombre') as string)?.trim()
-    const email = (formData.get('email') as string)?.trim().toLowerCase()
+    const email = (formData.get('email') as string)?.trim().toLowerCase() || ''
     const telefono = (formData.get('telefono') as string)?.trim()
     const cantidad_personas = parseInt(formData.get('cantidad_personas') as string)
     const monto_total = parseFloat(formData.get('monto_total') as string)
@@ -33,7 +33,10 @@ export async function POST(request: NextRequest) {
     if (!nombre || nombre.length < 2) {
       return NextResponse.json({ error: 'El nombre es obligatorio.' }, { status: 400 })
     }
-    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!telefono || telefono.length < 7) {
+      return NextResponse.json({ error: 'El número de celular es obligatorio.' }, { status: 400 })
+    }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json({ error: 'El correo electrónico no es válido.' }, { status: 400 })
     }
     if (!bailadora) {

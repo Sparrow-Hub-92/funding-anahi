@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -94,6 +94,204 @@ function CopyButton({ text }: { text: string }) {
   )
 }
 
+// ── Virtual Ticket Component ──────────────────────────────────────────────────
+interface TicketProps {
+  nombre: string
+  cantidad: number
+  titulo: string
+  fecha: string
+  hora: string
+  lugar: string
+}
+
+function VirtualTicket({ nombre, cantidad, titulo, fecha, hora, lugar }: TicketProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [ticketUrl, setTicketUrl] = useState<string | null>(null)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const W = 900
+    const H = 420
+    canvas.width = W
+    canvas.height = H
+
+    // Background
+    ctx.fillStyle = '#1A1210'
+    ctx.fillRect(0, 0, W, H)
+
+    // Left accent bar
+    const grad = ctx.createLinearGradient(0, 0, 0, H)
+    grad.addColorStop(0, '#C8724A')
+    grad.addColorStop(1, '#8B4E32')
+    ctx.fillStyle = grad
+    ctx.fillRect(0, 0, 8, H)
+
+    // Dotted divider at 55% width
+    const divX = Math.round(W * 0.58)
+    ctx.setLineDash([6, 8])
+    ctx.strokeStyle = 'rgba(255,255,255,0.15)'
+    ctx.lineWidth = 1.5
+    ctx.beginPath()
+    ctx.moveTo(divX, 32)
+    ctx.lineTo(divX, H - 32)
+    ctx.stroke()
+    ctx.setLineDash([])
+
+    // Punch holes on divider
+    ;[0.25, 0.5, 0.75].forEach((frac) => {
+      const cy = H * frac
+      ctx.fillStyle = '#1A1210'
+      ctx.beginPath()
+      ctx.arc(divX, cy, 14, 0, Math.PI * 2)
+      ctx.fill()
+      ctx.strokeStyle = 'rgba(255,255,255,0.12)'
+      ctx.lineWidth = 1
+      ctx.stroke()
+    })
+
+    // ── LEFT SECTION ───────────────────────────
+    const lPad = 44
+
+    // Label pill
+    ctx.fillStyle = 'rgba(200,114,74,0.18)'
+    roundRect(ctx, lPad, 38, 180, 26, 13)
+    ctx.fill()
+    ctx.fillStyle = '#C8724A'
+    ctx.font = '600 11px -apple-system, sans-serif'
+    ctx.letterSpacing = '0.08em'
+    ctx.fillText('TALENTO ECUADOR · TALLER SOLIDARIO', lPad + 12, 55)
+    ctx.letterSpacing = '0'
+
+    // Event title
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = `bold 32px Georgia, serif`
+    wrapText(ctx, titulo, lPad, 110, divX - lPad - 28, 40)
+
+    // Separator line
+    ctx.fillStyle = 'rgba(200,114,74,0.5)'
+    ctx.fillRect(lPad, 168, 56, 2)
+
+    // Date row
+    const metaY = 200
+    ctx.fillStyle = '#C8724A'
+    ctx.font = 'bold 14px -apple-system, sans-serif'
+    ctx.fillText('📅  ' + fecha, lPad, metaY)
+
+    ctx.fillStyle = 'rgba(255,255,255,0.6)'
+    ctx.font = '13px -apple-system, sans-serif'
+    ctx.fillText('🕓  ' + hora + '   ·   📍  ' + lugar, lPad, metaY + 26)
+
+    // Holder name
+    ctx.fillStyle = 'rgba(255,255,255,0.45)'
+    ctx.font = '11px -apple-system, sans-serif'
+    ctx.fillText('ASISTENTE', lPad, H - 72)
+    ctx.fillStyle = '#FFFFFF'
+    ctx.font = 'bold 22px -apple-system, sans-serif'
+    ctx.fillText(nombre, lPad, H - 48)
+
+    // ── RIGHT SECTION ──────────────────────────
+    const rPad = divX + 32
+    const rW = W - rPad - 32
+
+    // Entries label
+    ctx.fillStyle = 'rgba(255,255,255,0.45)'
+    ctx.font = '11px -apple-system, sans-serif'
+    ctx.fillText('ENTRADAS', rPad, H / 2 - 46)
+
+    // Big number
+    ctx.fillStyle = '#C8724A'
+    ctx.font = `bold 88px Georgia, serif`
+    ctx.textAlign = 'center'
+    ctx.fillText(String(cantidad), rPad + rW / 2, H / 2 + 16)
+
+    ctx.fillStyle = 'rgba(255,255,255,0.5)'
+    ctx.font = '13px -apple-system, sans-serif'
+    ctx.fillText(cantidad === 1 ? 'entrada' : 'entradas', rPad + rW / 2, H / 2 + 42)
+
+    // Total
+    ctx.fillStyle = 'rgba(255,255,255,0.28)'
+    ctx.font = '12px -apple-system, sans-serif'
+    ctx.fillText(`$${(cantidad * 5).toFixed(2)} USD`, rPad + rW / 2, H - 44)
+
+    ctx.textAlign = 'left'
+
+    // Subtle bottom tag
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'
+    ctx.font = '10px -apple-system, sans-serif'
+    ctx.fillText('Comprobante de inscripción · Presentar al ingreso', lPad, H - 18)
+
+    setTicketUrl(canvas.toDataURL('image/png'))
+  }, [nombre, cantidad, titulo, fecha, hora, lugar])
+
+  const handleDownload = () => {
+    if (!ticketUrl) return
+    const a = document.createElement('a')
+    a.href = ticketUrl
+    a.download = `ticket-${nombre.replace(/\s+/g, '-').toLowerCase()}.png`
+    a.click()
+  }
+
+  return (
+    <div className="ticket-wrapper">
+      <canvas ref={canvasRef} style={{ display: 'none' }} />
+      {ticketUrl && (
+        <>
+          <div className="ticket-preview">
+            <img src={ticketUrl} alt="Tu ticket de inscripción" className="ticket-img" />
+          </div>
+          <button type="button" className="ticket-download-btn" onClick={handleDownload}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Descargar ticket
+          </button>
+        </>
+      )}
+    </div>
+  )
+}
+
+// Canvas helper: rounded rect path
+function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.lineTo(x + w - r, y)
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r)
+  ctx.lineTo(x + w, y + h - r)
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h)
+  ctx.lineTo(x + r, y + h)
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r)
+  ctx.lineTo(x, y + r)
+  ctx.quadraticCurveTo(x, y, x + r, y)
+  ctx.closePath()
+}
+
+// Canvas helper: word-wrap text
+function wrapText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxW: number, lineH: number) {
+  const words = text.split(' ')
+  let line = ''
+  let curY = y
+  for (const word of words) {
+    const test = line ? line + ' ' + word : word
+    if (ctx.measureText(test).width > maxW && line) {
+      ctx.fillText(line, x, curY)
+      line = word
+      curY += lineH
+    } else {
+      line = test
+    }
+  }
+  if (line) ctx.fillText(line, x, curY)
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function ClasePage() {
   const params = useParams()
   const tipo = params.tipo as string
@@ -101,7 +299,6 @@ export default function ClasePage() {
   const bailadoras = BAILADORAS[tipo] ?? []
 
   const [nombre, setNombre] = useState('')
-  const [email, setEmail] = useState('')
   const [telefono, setTelefono] = useState('')
   const [cantidad, setCantidad] = useState(1)
   const [bailadora, setBailadora] = useState('')
@@ -141,15 +338,10 @@ export default function ClasePage() {
 
   const monto = clase.precio * cantidad
 
-  // Compute how many cupos each bailarina has left
   const cuposPorBailarina = cupos?.cuposBailarina ?? {}
   const maxPorBailarina = cupos?.maxPorBailarina ?? 10
-
-  // When a bailarina is selected, limit qty to remaining cupos for that bailarina
   const cuposUsadosBailadora = bailadora ? (cuposPorBailarina[bailadora] ?? 0) : 0
   const cuposRestantesBailadora = Math.max(maxPorBailarina - cuposUsadosBailadora, 0)
-
-  // Adjust quantity if a bailarina is selected and current qty exceeds their available cupos
   const maxCantidad = bailadora ? cuposRestantesBailadora : maxPorBailarina
 
   const handleBailadoraChange = (val: string) => {
@@ -168,7 +360,7 @@ export default function ClasePage() {
       return
     }
     if (!bailadora) {
-      setApiError('Por favor selecciona a qué bailarina deseas apoyar.')
+      setApiError('Por favor selecciona a qué bailarín deseas apoyar.')
       return
     }
 
@@ -177,7 +369,6 @@ export default function ClasePage() {
     const formData = new FormData()
     formData.append('tipo_clase', tipo)
     formData.append('nombre', nombre)
-    formData.append('email', email)
     formData.append('telefono', telefono)
     formData.append('cantidad_personas', String(cantidad))
     formData.append('monto_total', String(monto))
@@ -202,27 +393,36 @@ export default function ClasePage() {
   if (submitted) {
     return (
       <div className="form-page">
-        <div className="form-container">
+        <div className="form-container form-container--wide">
           <div className="success-card">
             <div className="success-icon">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <polyline points="20 6 9 17 4 12"/>
               </svg>
             </div>
-            <h2 className="font-display">¡Inscripción recibida!</h2>
-            <p>
-              Gracias, <strong>{nombre}</strong>. Tu inscripción al{' '}
-              <strong>{clase.titulo}</strong> del <strong>{clase.fechaCorta}</strong> ha
-              sido registrada. Verificaremos tu pago y te confirmaremos por correo.
+            <h2 className="font-display">¡Inscripción confirmada!</h2>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.75rem' }}>
+              Descarga tu ticket de entrada y preséntalo el día del evento.
             </p>
-            <Link href="/" className="btn-outline">← Volver al inicio</Link>
+
+            <VirtualTicket
+              nombre={nombre}
+              cantidad={cantidad}
+              titulo={clase.titulo}
+              fecha={clase.fecha}
+              hora={clase.hora}
+              lugar={clase.lugar}
+            />
+
+            <Link href="/" className="btn-outline" style={{ marginTop: '1.5rem' }}>
+              ← Volver al inicio
+            </Link>
           </div>
         </div>
       </div>
     )
   }
 
-  // Capacity info
   const libres = cupos ? Math.max(cupos.capacidad - cupos.ocupados, 0) : null
   const pct = cupos ? Math.min((cupos.ocupados / cupos.capacidad) * 100, 100) : 0
   const barColor = pct >= 80 ? 'cap-bar--red' : pct >= 50 ? 'cap-bar--amber' : 'cap-bar--green'
@@ -237,26 +437,20 @@ export default function ClasePage() {
           Volver al inicio
         </Link>
 
-        {/* Hero Image */}
-        <div style={{ position: 'relative', width: '100%', height: '220px', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: '2rem' }}>
-          <Image
-            src={clase.imagen}
-            alt={clase.titulo}
-            fill
-            style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
-            onContextMenu={(e) => e.preventDefault()}
-            draggable={false}
-          />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(44,36,32,0.55) 0%, transparent 60%)' }} />
-        </div>
+        {clase.imagen && (
+          <div className="form-hero-img">
+            <Image src={clase.imagen} alt={clase.titulo} fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} priority onContextMenu={(e) => e.preventDefault()} draggable={false} />
+          </div>
+        )}
 
-        {/* Capacity display */}
         {cupos && (
-          <div className="form-cupos">
-            <div className="form-cupos-header">
-              <span>Disponibilidad en tiempo real</span>
-              <span className="form-cupos-count">
-                <strong>{libres}</strong> cupos disponibles
+          <div className="cap-bar-wrapper">
+            <div className="cap-bar-info">
+              <span className="cap-live-dot" />
+              <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Disponibilidad en tiempo real</span>
+              <span className="cap-count">
+                <strong style={{ fontSize: '1.05rem' }}>{libres}</strong>
+                {' '}cupos disponibles
               </span>
             </div>
             <div className="cap-bar-track">
@@ -293,7 +487,7 @@ export default function ClasePage() {
           {clase.descripcion}
         </p>
 
-        {/* ── DATOS DE TRANSFERENCIA (Compact & Full Details) ── */}
+        {/* ── DATOS DE TRANSFERENCIA ── */}
         <div className="transfer-card-compact">
           <div className="transfer-card-header">
             <div className="transfer-card-title">
@@ -342,23 +536,16 @@ export default function ClasePage() {
                 value={nombre} onChange={(e) => setNombre(e.target.value)} required autoComplete="name" />
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
-                <label htmlFor="email" className="form-label form-label-required">Correo electrónico</label>
-                <input id="email" type="email" className="form-input" placeholder="tu@correo.com"
-                  value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" />
-              </div>
-              <div className="form-group">
-                <label htmlFor="telefono" className="form-label form-label-required">Teléfono</label>
-                <input id="telefono" type="tel" className="form-input" placeholder="0999 000 000"
-                  value={telefono} onChange={(e) => setTelefono(e.target.value)} required autoComplete="tel" />
-              </div>
+            <div className="form-group">
+              <label htmlFor="telefono" className="form-label form-label-required">Número de celular</label>
+              <input id="telefono" type="tel" className="form-input" placeholder="0999 000 000"
+                value={telefono} onChange={(e) => setTelefono(e.target.value)} required autoComplete="tel" />
             </div>
 
-            {/* Bailadora dropdown with per-bailarina capacity blocking */}
+            {/* Bailadora dropdown */}
             <div className="form-group">
               <label htmlFor="bailadora" className="form-label form-label-required">
-                ¿A qué bailarina quieres apoyar?
+                ¿A qué bailarín quieres apoyar?
               </label>
               <div className="select-wrapper">
                 <select
@@ -368,7 +555,7 @@ export default function ClasePage() {
                   onChange={(e) => handleBailadoraChange(e.target.value)}
                   required
                 >
-                  <option value="">Selecciona una bailarina...</option>
+                  <option value="">Selecciona un bailarín...</option>
                   {bailadoras.map((b) => {
                     const usados = cuposPorBailarina[b] ?? 0
                     const agotada = usados >= maxPorBailarina
@@ -385,22 +572,22 @@ export default function ClasePage() {
               </div>
               {bailadora && cuposRestantesBailadora <= 5 && cuposRestantesBailadora > 0 && (
                 <p style={{ fontSize: '0.8rem', color: '#FF9800', marginTop: '0.4rem' }}>
-                  ⚠️ Solo quedan {cuposRestantesBailadora} cupo{cuposRestantesBailadora > 1 ? 's' : ''} para esta bailarina.
+                  ⚠️ Solo quedan {cuposRestantesBailadora} cupo{cuposRestantesBailadora > 1 ? 's' : ''} para este bailarín.
                 </p>
               )}
               {bailadora && cuposRestantesBailadora === 0 && (
                 <p style={{ fontSize: '0.8rem', color: 'var(--color-error)', marginTop: '0.4rem' }}>
-                  🔴 Esta bailarina ya completó sus 10 cupos.
+                  🔴 Este bailarín ya completó sus 10 cupos.
                 </p>
               )}
             </div>
 
-            {/* Cantidad — limited by bailarina availability */}
+            {/* Cantidad */}
             <div className="form-group">
               <label className="form-label form-label-required">Número de entradas</label>
               {bailadora && maxCantidad === 0 ? (
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-error)' }}>
-                  Esta bailarina no tiene cupos disponibles.
+                  Este bailarín no tiene cupos disponibles.
                 </p>
               ) : (
                 <div className="qty-control">
@@ -415,7 +602,7 @@ export default function ClasePage() {
               )}
               {bailadora && maxCantidad > 0 && maxCantidad < maxPorBailarina && (
                 <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.35rem' }}>
-                  Máximo {maxCantidad} entrada{maxCantidad > 1 ? 's' : ''} disponible{maxCantidad > 1 ? 's' : ''} para esta bailarina.
+                  Máximo {maxCantidad} entrada{maxCantidad > 1 ? 's' : ''} disponible{maxCantidad > 1 ? 's' : ''} para este bailarín.
                 </p>
               )}
             </div>
@@ -441,7 +628,7 @@ export default function ClasePage() {
               id="submit-registro-btn"
               type="submit"
               className="submit-btn"
-              disabled={isLoading || !nombre || !email || !telefono || !bailadora || (bailadora ? cuposRestantesBailadora === 0 : false)}
+              disabled={isLoading || !nombre || !telefono || !bailadora || (bailadora ? cuposRestantesBailadora === 0 : false)}
             >
               {isLoading ? (
                 <><span className="spinner" />Enviando...</>

@@ -1047,6 +1047,10 @@ h1, h2, h3 {
 }
 
 /* Success State */
+.form-container--wide {
+  max-width: 760px;
+}
+
 .success-card {
   text-align: center;
   padding: 3rem 2rem;
@@ -1069,18 +1073,74 @@ h1, h2, h3 {
 }
 
 .success-card h2 {
-  font-size: 1.7rem;
+  font-size: 1.8rem;
   color: var(--color-text);
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .success-card p {
   color: var(--color-text-muted);
-  line-height: 1.7;
-  margin-bottom: 1.75rem;
-  max-width: 380px;
+  line-height: 1.6;
+  max-width: 480px;
   margin-left: auto;
   margin-right: auto;
+}
+
+/* Virtual Ticket */
+.ticket-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  width: 100%;
+  margin: 1.5rem 0;
+}
+
+.ticket-preview {
+  width: 100%;
+  max-width: 620px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.ticket-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.32);
+}
+
+.ticket-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.ticket-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.85rem 2rem;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 18px rgba(200, 114, 74, 0.4);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.ticket-download-btn:hover {
+  background: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(200, 114, 74, 0.55);
+}
+
+.ticket-download-btn:active {
+  transform: translateY(0);
 }
 
 .btn-outline {
