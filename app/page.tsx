@@ -23,15 +23,16 @@ function CapacityBar({ data }: { data: CuposData | undefined }) {
   const pct = Math.min((ocupados / capacidad) * 100, 100)
   const libres = Math.max(capacidad - ocupados, 0)
   const colorClass = pct >= 80 ? 'cap-bar--red' : pct >= 50 ? 'cap-bar--amber' : 'cap-bar--green'
+  const cupoTexto = libres === 1 ? 'cupo disponible' : 'cupos disponibles'
 
   return (
-    <div className="cap-bar-wrap" aria-label={`${libres} cupos disponibles de ${capacidad}`}>
+    <div className="cap-bar-wrap" aria-label={`${libres} ${cupoTexto} de ${capacidad}`}>
       <div className="cap-bar-track">
         <div className={`cap-bar-fill ${colorClass}`} style={{ width: `${pct}%` }} />
       </div>
       <div className="cap-bar-labels">
         <span className="cap-bar-count">
-          <strong>{libres}</strong> cupos disponibles
+          <strong>{libres}</strong> {cupoTexto}
         </span>
         {libres <= 10 && libres > 0 && (
           <span className="cap-bar-warning">⚠️ ¡Últimos cupos!</span>

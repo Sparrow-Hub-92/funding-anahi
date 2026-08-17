@@ -341,7 +341,6 @@ export default function ClasePage() {
   const maxCantidad = bailadora ? cuposRestantesBailadora : maxPorBailarina
 
   const handlePhoneChange = (val: string) => {
-    // Extract only digits, max 10
     const digits = val.replace(/\D/g, '').slice(0, 10)
     let formatted = digits
     if (digits.length > 7) {
@@ -441,6 +440,7 @@ export default function ClasePage() {
   const libres = cupos ? Math.max(cupos.capacidad - cupos.ocupados, 0) : null
   const pct = cupos ? Math.min((cupos.ocupados / cupos.capacidad) * 100, 100) : 0
   const barColor = pct >= 80 ? 'cap-bar--red' : pct >= 50 ? 'cap-bar--amber' : 'cap-bar--green'
+  const cupoTexto = libres === 1 ? 'cupo disponible' : 'cupos disponibles'
 
   return (
     <div className="form-page">
@@ -470,7 +470,7 @@ export default function ClasePage() {
           <div className="form-cupos">
             <div className="form-cupos-header">
               <span className="form-cupos-count">
-                <strong>{libres}</strong> cupos disponibles
+                <strong>{libres}</strong> {cupoTexto}
               </span>
               {libres === 0 ? (
                 <span className="cap-bar-full">Agotado</span>
@@ -607,9 +607,10 @@ export default function ClasePage() {
                   {bailadoras.map((b) => {
                     const usados = cuposPorBailarina[b] ?? 0
                     const agotada = usados >= maxPorBailarina
+                    const restantes = maxPorBailarina - usados
                     return (
                       <option key={b} value={b} disabled={agotada}>
-                        {b}{agotada ? ' — Cupos agotados' : usados > 0 ? ` — ${maxPorBailarina - usados} cupos restantes` : ''}
+                        {b}{agotada ? ' — Cupos agotados' : usados > 0 ? ` — ${restantes} ${restantes === 1 ? 'cupo restante' : 'cupos restantes'}` : ''}
                       </option>
                     )
                   })}
@@ -620,7 +621,7 @@ export default function ClasePage() {
               </div>
               {bailadora && cuposRestantesBailadora <= 5 && cuposRestantesBailadora > 0 && (
                 <p style={{ fontSize: '0.8rem', color: '#FF9800', marginTop: '0.4rem' }}>
-                  ⚠️ Solo quedan {cuposRestantesBailadora} cupo{cuposRestantesBailadora > 1 ? 's' : ''} para este bailarín.
+                  {cuposRestantesBailadora === 1 ? '⚠️ Solo queda 1 cupo para este bailarín.' : `⚠️ Solo quedan ${cuposRestantesBailadora} cupos para este bailarín.`}
                 </p>
               )}
               {bailadora && cuposRestantesBailadora === 0 && (
@@ -663,7 +664,7 @@ export default function ClasePage() {
               )}
               {bailadora && maxCantidad > 0 && maxCantidad < maxPorBailarina && (
                 <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.35rem' }}>
-                  Máximo {maxCantidad} entrada{maxCantidad > 1 ? 's' : ''} disponible{maxCantidad > 1 ? 's' : ''} para este bailarín.
+                  {maxCantidad === 1 ? 'Máximo 1 entrada disponible para este bailarín.' : `Máximo ${maxCantidad} entradas disponibles para este bailarín.`}
                 </p>
               )}
             </div>
