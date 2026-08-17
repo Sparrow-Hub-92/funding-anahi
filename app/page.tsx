@@ -70,9 +70,14 @@ export default function HomePage() {
         <span className="navbar-logo">
           Talento <span>Ecuador</span>
         </span>
-        <button id="navbar-donar-btn" className="navbar-cta" onClick={() => setShowModal(true)}>
-          Donar
-        </button>
+        <div className="navbar-actions">
+          <a id="navbar-talleres-btn" href="#eventos" className="navbar-btn-secondary">
+            Ver talleres
+          </a>
+          <button id="navbar-donar-btn" className="navbar-cta" onClick={() => setShowModal(true)}>
+            Donar
+          </button>
+        </div>
       </nav>
 
       {/* ── HERO ──────────────────────────────────────────── */}
