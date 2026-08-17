@@ -39,13 +39,13 @@ const DESKTOP_SLIDES: SlideLayout[] = [
       { src: '/media/final-08.jpg', alt: 'Bailarina en pose de competencia', position: 'center top' },
     ],
   },
-  // Slide 2: 1 Horizontal (Full stage presentation) + 2 Verticals (Stage solos)
+  // Slide 2: 1 Horizontal (Final-15 stage choreography) + 2 Verticals (Final-13 & Final-14 solos)
   {
     type: 'trio-mix',
-    horizontal: { src: '/media/final-04.jpg', alt: 'Presentación grupal en escenario', position: 'center 25%' },
+    horizontal: { src: '/media/final-15.jpg', alt: 'Presentación grupal en escenario', position: 'center 25%' },
     verticals: [
-      { src: '/media/final-05.jpg', alt: 'Bailarina en escenario', position: 'center top' },
-      { src: '/media/final-06.jpg', alt: 'Bailarina solista en pose', position: 'center top' },
+      { src: '/media/final-13.jpg', alt: 'Bailarina en escenario', position: 'center top' },
+      { src: '/media/final-14.jpg', alt: 'Bailarina solista en pose', position: 'center top' },
     ],
   },
   // Slide 3: 2 Horizontals — Stage choreographies (16:9 expansive landscape)
@@ -56,11 +56,20 @@ const DESKTOP_SLIDES: SlideLayout[] = [
       { src: '/media/final-10.jpg', alt: 'Dúo en competencia de baile', position: 'center' },
     ],
   },
-  // Slide 4: 2 Verticals — Full Team portrait & Academy training
+  // Slide 4: 1 Horizontal (Final-12 stage presentation) + 2 Verticals (Final-05 & Final-06 solos)
+  {
+    type: 'trio-mix',
+    horizontal: { src: '/media/final-12.jpg', alt: 'Bailarines en presentación', position: 'center 25%' },
+    verticals: [
+      { src: '/media/final-05.jpg', alt: 'Bailarina en pose de danza', position: 'center top' },
+      { src: '/media/final-06.jpg', alt: 'Bailarina solista en competencia', position: 'center top' },
+    ],
+  },
+  // Slide 5: 2 Verticals — Solo portrait & Academy training
   {
     type: 'dual-portrait',
     items: [
-      { src: '/media/final-11.jpg', alt: 'Equipo de baile I Dance', position: 'center top' },
+      { src: '/media/final-13.jpg', alt: 'Bailarina solista en competencia', position: 'center top' },
       { src: '/media/final-03.jpg', alt: 'Academia I Dance', position: 'center' },
     ],
   },
@@ -69,12 +78,14 @@ const DESKTOP_SLIDES: SlideLayout[] = [
 const MOBILE_SLIDES: PhotoItem[] = [
   { src: '/media/final-01.jpg', alt: 'Bailarines en competencia', position: 'center 20%' },
   { src: '/media/final-08.jpg', alt: 'Bailarina en pose', position: 'center top' },
-  { src: '/media/final-04.jpg', alt: 'Presentación grupal', position: 'center 25%' },
-  { src: '/media/final-05.jpg', alt: 'Bailarina en escenario', position: 'center top' },
+  { src: '/media/final-15.jpg', alt: 'Presentación grupal en escenario', position: 'center 25%' },
+  { src: '/media/final-13.jpg', alt: 'Bailarina en escenario', position: 'center top' },
+  { src: '/media/final-14.jpg', alt: 'Bailarina solista en pose', position: 'center top' },
   { src: '/media/final-09.jpg', alt: 'Actuación grupal', position: 'center 30%' },
+  { src: '/media/final-12.jpg', alt: 'Bailarines en presentación', position: 'center 25%' },
+  { src: '/media/final-05.jpg', alt: 'Bailarina en pose de danza', position: 'center top' },
   { src: '/media/final-06.jpg', alt: 'Bailarina solista', position: 'center top' },
   { src: '/media/final-10.jpg', alt: 'Dúo en competencia', position: 'center' },
-  { src: '/media/final-11.jpg', alt: 'Equipo de baile', position: 'center top' },
   { src: '/media/final-03.jpg', alt: 'Academia I Dance', position: 'center' },
 ]
 
