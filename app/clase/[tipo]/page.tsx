@@ -130,7 +130,7 @@ function VirtualTicket({ nombre, cantidad, titulo, fecha, hora, lugar }: TicketP
     ctx.fillStyle = grad
     ctx.fillRect(0, 0, 8, H)
 
-    // Dotted divider at 55% width
+    // Dotted divider at 58% width
     const divX = Math.round(W * 0.58)
     ctx.setLineDash([6, 8])
     ctx.strokeStyle = 'rgba(255,255,255,0.15)'
@@ -158,18 +158,16 @@ function VirtualTicket({ nombre, cantidad, titulo, fecha, hora, lugar }: TicketP
 
     // Label pill
     ctx.fillStyle = 'rgba(200,114,74,0.18)'
-    roundRect(ctx, lPad, 38, 180, 26, 13)
+    roundRect(ctx, lPad, 38, 250, 26, 13)
     ctx.fill()
     ctx.fillStyle = '#C8724A'
     ctx.font = '600 11px -apple-system, sans-serif'
-    ctx.letterSpacing = '0.08em'
     ctx.fillText('TALENTO ECUADOR · TALLER SOLIDARIO', lPad + 12, 55)
-    ctx.letterSpacing = '0'
 
     // Event title
     ctx.fillStyle = '#FFFFFF'
-    ctx.font = `bold 32px Georgia, serif`
-    wrapText(ctx, titulo, lPad, 110, divX - lPad - 28, 40)
+    ctx.font = `bold 30px Georgia, serif`
+    wrapText(ctx, titulo, lPad, 110, divX - lPad - 28, 38)
 
     // Separator line
     ctx.fillStyle = 'rgba(200,114,74,0.5)'
@@ -257,7 +255,6 @@ function VirtualTicket({ nombre, cantidad, titulo, fecha, hora, lugar }: TicketP
   )
 }
 
-// Canvas helper: rounded rect path
 function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number) {
   ctx.beginPath()
   ctx.moveTo(x + r, y)
@@ -272,7 +269,6 @@ function roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: numbe
   ctx.closePath()
 }
 
-// Canvas helper: word-wrap text
 function wrapText(ctx: CanvasRenderingContext2D, text: string, x: number, y: number, maxW: number, lineH: number) {
   const words = text.split(' ')
   let line = ''
