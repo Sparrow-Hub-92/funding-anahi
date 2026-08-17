@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: 'https://talentoecuador.com/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Talento Ecuador - Impulsando a nuestros atletas y artistas',
+        width: 1600,
+        height: 900,
+        alt: 'Talento Ecuador - I Dance rumbo a la PLF Latin Dance World Competition',
         type: 'image/jpeg',
       },
     ],
