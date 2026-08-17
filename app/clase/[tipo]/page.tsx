@@ -38,9 +38,9 @@ const CLASES: Record<
   }
 > = {
   'clase-1': {
-    titulo: 'Taller de Baile Solidario',
+    titulo: 'Taller 1: Ritmos Mixtos',
     fecha: 'Sábado 22 de agosto de 2026',
-    fechaCorta: 'Sáb 22 ago',
+    fechaCorta: 'Sábado 22 de agosto',
     hora: '16:00 a 17:00',
     lugar: 'Academia I Dance',
     mapsUrl: 'https://share.google/rvt1F4rhEEZoeneVk',
@@ -50,9 +50,9 @@ const CLASES: Record<
       'Una clase especial de ritmos mixtos donde vivirás la energía del baile junto a nuestros bailarines. Todo lo recaudado va directo al fondo para ir a la PLF Latin Dance World Competition en Perú.',
   },
   'clase-2': {
-    titulo: 'Taller de Baile Solidario',
+    titulo: 'Taller 2: Ritmos Mixtos',
     fecha: 'Sábado 29 de agosto de 2026',
-    fechaCorta: 'Sáb 29 ago',
+    fechaCorta: 'Sábado 29 de agosto',
     hora: '16:00 a 17:00',
     lugar: 'Academia I Dance',
     mapsUrl: 'https://share.google/rvt1F4rhEEZoeneVk',
@@ -265,25 +265,28 @@ export default function ClasePage() {
           </div>
         )}
 
-        <h1 className="form-title font-display">{clase.titulo}</h1>
+        <div className="form-header-group">
+          <span className="form-event-tag">Taller Solidario</span>
+          <h1 className="form-title font-display">{clase.titulo}</h1>
+          <div className="form-date-banner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+            </svg>
+            <span className="form-date-text">{clase.fecha}</span>
+            <span className="form-date-divider">·</span>
+            <span className="form-date-time">{clase.hora}</span>
+          </div>
 
-        <div className="form-meta">
-          <span className="form-meta-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            {clase.fecha}
-          </span>
-          <span className="form-meta-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            {clase.hora}
-          </span>
-          <a href={clase.mapsUrl} target="_blank" rel="noopener noreferrer" className="form-meta-item form-meta-link">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            {clase.lugar} — Ver ubicación
-          </a>
-          <span className="form-meta-item">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-            ${clase.precio} por persona
-          </span>
+          <div className="form-meta">
+            <a href={clase.mapsUrl} target="_blank" rel="noopener noreferrer" className="form-meta-item form-meta-link">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              {clase.lugar} — Ver ubicación
+            </a>
+            <span className="form-meta-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              ${clase.precio} por persona
+            </span>
+          </div>
         </div>
 
         <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', lineHeight: 1.7, fontSize: '0.95rem' }}>
