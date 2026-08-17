@@ -313,6 +313,10 @@ export default function ClasePage() {
               <span className="transfer-cell-val">Cuenta de Ahorros</span>
             </div>
             <div className="transfer-cell">
+              <span className="transfer-cell-label">Titular</span>
+              <span className="transfer-cell-val">Paola Falconí</span>
+            </div>
+            <div className="transfer-cell">
               <span className="transfer-cell-label">Cédula</span>
               <span className="transfer-cell-val">1803732328</span>
             </div>
