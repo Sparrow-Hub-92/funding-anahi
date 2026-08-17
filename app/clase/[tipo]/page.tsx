@@ -340,6 +340,21 @@ export default function ClasePage() {
   const cuposRestantesBailadora = Math.max(maxPorBailarina - cuposUsadosBailadora, 0)
   const maxCantidad = bailadora ? cuposRestantesBailadora : maxPorBailarina
 
+  const handlePhoneChange = (val: string) => {
+    // Extract only digits, max 10
+    const digits = val.replace(/\D/g, '').slice(0, 10)
+    let formatted = digits
+    if (digits.length > 7) {
+      formatted = `${digits.slice(0, 4)} ${digits.slice(4, 7)} ${digits.slice(7)}`
+    } else if (digits.length > 4) {
+      formatted = `${digits.slice(0, 4)} ${digits.slice(4)}`
+    }
+    setTelefono(formatted)
+  }
+
+  const phoneDigits = telefono.replace(/\D/g, '')
+  const isPhoneValid = phoneDigits.length === 10
+
   const handleBailadoraChange = (val: string) => {
     setBailadora(val)
     const usados = cuposPorBailarina[val] ?? 0
@@ -355,6 +370,10 @@ export default function ClasePage() {
       setFileError('Debes adjuntar el comprobante de pago para continuar.')
       return
     }
+    if (!isPhoneValid) {
+      setApiError('Por favor ingresa un número de celular válido de 10 dígitos.')
+      return
+    }
     if (!bailadora) {
       setApiError('Por favor selecciona a qué bailarín deseas apoyar.')
       return
@@ -364,8 +383,8 @@ export default function ClasePage() {
 
     const formData = new FormData()
     formData.append('tipo_clase', tipo)
-    formData.append('nombre', nombre)
-    formData.append('telefono', telefono)
+    formData.append('nombre', nombre.trim())
+    formData.append('telefono', phoneDigits)
     formData.append('cantidad_personas', String(cantidad))
     formData.append('monto_total', String(monto))
     formData.append('bailadora', bailadora)
@@ -435,19 +454,29 @@ export default function ClasePage() {
 
         {clase.imagen && (
           <div className="form-hero-img">
-            <Image src={clase.imagen} alt={clase.titulo} fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} priority onContextMenu={(e) => e.preventDefault()} draggable={false} />
+            <Image
+              src={clase.imagen}
+              alt={clase.titulo}
+              fill
+              style={{ objectFit: 'cover', objectPosition: 'center 20%' }}
+              priority
+              onContextMenu={(e) => e.preventDefault()}
+              draggable={false}
+            />
           </div>
         )}
 
         {cupos && (
-          <div className="cap-bar-wrapper">
-            <div className="cap-bar-info">
-              <span className="cap-live-dot" />
-              <span style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>Disponibilidad en tiempo real</span>
-              <span className="cap-count">
-                <strong style={{ fontSize: '1.05rem' }}>{libres}</strong>
-                {' '}cupos disponibles
+          <div className="form-cupos">
+            <div className="form-cupos-header">
+              <span className="form-cupos-count">
+                <strong>{libres}</strong> cupos disponibles
               </span>
+              {libres === 0 ? (
+                <span className="cap-bar-full">Agotado</span>
+              ) : libres !== null && libres <= 10 ? (
+                <span className="cap-bar-warning">¡Últimos cupos!</span>
+              ) : null}
             </div>
             <div className="cap-bar-track">
               <div className={`cap-bar-fill ${barColor}`} style={{ width: `${pct}%` }} />
@@ -528,14 +557,37 @@ export default function ClasePage() {
 
             <div className="form-group">
               <label htmlFor="nombre" className="form-label form-label-required">Nombre completo</label>
-              <input id="nombre" type="text" className="form-input" placeholder="Tu nombre completo"
-                value={nombre} onChange={(e) => setNombre(e.target.value)} required autoComplete="name" />
+              <input
+                id="nombre"
+                type="text"
+                className="form-input"
+                placeholder="Tu nombre completo"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                required
+                autoComplete="name"
+              />
             </div>
 
             <div className="form-group">
               <label htmlFor="telefono" className="form-label form-label-required">Número de celular</label>
-              <input id="telefono" type="tel" className="form-input" placeholder="0999 000 000"
-                value={telefono} onChange={(e) => setTelefono(e.target.value)} required autoComplete="tel" />
+              <input
+                id="telefono"
+                type="tel"
+                inputMode="numeric"
+                className="form-input"
+                placeholder="0999 000 000"
+                maxLength={12}
+                value={telefono}
+                onChange={(e) => handlePhoneChange(e.target.value)}
+                required
+                autoComplete="tel"
+              />
+              {telefono && phoneDigits.length > 0 && phoneDigits.length < 10 && (
+                <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', marginTop: '0.35rem' }}>
+                  Ingresa los 10 dígitos de tu número celular ({phoneDigits.length}/10)
+                </p>
+              )}
             </div>
 
             {/* Bailadora dropdown */}
@@ -587,13 +639,26 @@ export default function ClasePage() {
                 </p>
               ) : (
                 <div className="qty-control">
-                  <button id="qty-decrease-btn" type="button" className="qty-btn"
-                    onClick={() => setCantidad((c) => Math.max(1, c - 1))} aria-label="Disminuir">−</button>
+                  <button
+                    id="qty-decrease-btn"
+                    type="button"
+                    className="qty-btn"
+                    onClick={() => setCantidad((c) => Math.max(1, c - 1))}
+                    aria-label="Disminuir"
+                  >
+                    −
+                  </button>
                   <span className="qty-display" aria-live="polite">{cantidad}</span>
-                  <button id="qty-increase-btn" type="button" className="qty-btn"
+                  <button
+                    id="qty-increase-btn"
+                    type="button"
+                    className="qty-btn"
                     onClick={() => setCantidad((c) => Math.min(maxCantidad || maxPorBailarina, c + 1))}
                     disabled={cantidad >= (maxCantidad || maxPorBailarina)}
-                    aria-label="Aumentar">+</button>
+                    aria-label="Aumentar"
+                  >
+                    +
+                  </button>
                 </div>
               )}
               {bailadora && maxCantidad > 0 && maxCantidad < maxPorBailarina && (
@@ -624,7 +689,7 @@ export default function ClasePage() {
               id="submit-registro-btn"
               type="submit"
               className="submit-btn"
-              disabled={isLoading || !nombre || !telefono || !bailadora || (bailadora ? cuposRestantesBailadora === 0 : false)}
+              disabled={isLoading || !nombre.trim() || !isPhoneValid || !bailadora || !file || (bailadora ? cuposRestantesBailadora === 0 : false)}
             >
               {isLoading ? (
                 <><span className="spinner" />Enviando...</>
