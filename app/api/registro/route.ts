@@ -48,8 +48,8 @@ export async function POST(request: NextRequest) {
     if (!archivo || archivo.size === 0) {
       return NextResponse.json({ error: 'El comprobante de pago es obligatorio.' }, { status: 400 })
     }
-    if (archivo.size > 10 * 1024 * 1024) {
-      return NextResponse.json({ error: 'El comprobante no puede superar los 10 MB.' }, { status: 400 })
+    if (archivo.size > 20 * 1024 * 1024) {
+      return NextResponse.json({ error: 'El comprobante no puede superar los 20 MB.' }, { status: 400 })
     }
 
     const supabase = getSupabase()
@@ -98,17 +98,28 @@ export async function POST(request: NextRequest) {
     // ── Subir comprobante a Supabase Storage ──────────────
     const extension = archivo.name.split('.').pop()?.toLowerCase() ?? 'jpg'
     const timestamp = Date.now()
-    const filePath = `${tipo_clase}/${timestamp}_${nombre.replace(/\s+/g, '_')}.${extension}`
+    const safeName = nombre.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_\-]/g, '')
+    const filePath = `${tipo_clase}/${timestamp}_${safeName}.${extension}`
+
+    // iOS HEIC files often arrive with blank or 'application/octet-stream' content type.
+    // Map by extension to a valid MIME so Supabase stores them correctly.
+    const extToMime: Record<string, string> = {
+      jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png',
+      webp: 'image/webp', heic: 'image/heic', heif: 'image/heif', pdf: 'application/pdf',
+    }
+    const contentType = (archivo.type && archivo.type !== 'application/octet-stream')
+      ? archivo.type
+      : (extToMime[extension] ?? 'image/jpeg')
 
     const { error: uploadError } = await supabase.storage
       .from('comprobantes')
       .upload(filePath, archivo, {
-        contentType: archivo.type,
+        contentType,
         upsert: false,
       })
 
     if (uploadError) {
-      console.error('Error al subir comprobante:', uploadError)
+      console.error('Error al subir comprobante:', JSON.stringify(uploadError))
       return NextResponse.json(
         { error: 'Error al subir el comprobante. Intenta de nuevo.' },
         { status: 500 }

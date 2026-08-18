@@ -15,13 +15,23 @@ export default function FileUpload({ onFileSelect, error }: FileUploadProps) {
   const handleFile = useCallback(
     (selected: File | null) => {
       if (!selected) return
-      const allowed = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
-      if (!allowed.includes(selected.type) && !selected.name.match(/\.(jpg|jpeg|png|webp|pdf)$/i)) {
-        alert('Solo se permiten imágenes (JPG, PNG, WebP) o archivos PDF.')
+      // Accept by MIME type OR by extension — iOS HEIC and some Android files
+      // arrive with blank or 'application/octet-stream' MIME types.
+      const allowedMime = [
+        'image/jpeg', 'image/jpg', 'image/png', 'image/webp',
+        'image/heic', 'image/heif', 'application/pdf',
+        'application/octet-stream', // iOS HEIC sometimes uses this
+        '', // some browsers send empty MIME on HEIC
+      ]
+      const allowedExt = /\.(jpg|jpeg|png|webp|heic|heif|pdf)$/i
+      const mimeOk = allowedMime.includes(selected.type)
+      const extOk = allowedExt.test(selected.name)
+      if (!mimeOk && !extOk) {
+        alert('Solo se permiten imágenes (JPG, PNG, HEIC, WebP) o archivos PDF.')
         return
       }
-      if (selected.size > 10 * 1024 * 1024) {
-        alert('El archivo no puede superar los 10 MB.')
+      if (selected.size > 20 * 1024 * 1024) {
+        alert('El archivo no puede superar los 20 MB.')
         return
       }
       setFile(selected)
@@ -59,7 +69,7 @@ export default function FileUpload({ onFileSelect, error }: FileUploadProps) {
         ref={inputRef}
         id="comprobante-input"
         type="file"
-        accept="image/jpeg,image/png,image/webp,application/pdf"
+        accept="image/jpeg,image/png,image/webp,image/heic,image/heif,application/pdf"
         onChange={handleChange}
         style={{ display: 'none' }}
       />
@@ -94,7 +104,7 @@ export default function FileUpload({ onFileSelect, error }: FileUploadProps) {
         <p className="file-upload-text">
           <strong>Haz clic para adjuntar</strong> o arrastra tu comprobante aquí
         </p>
-        <p className="file-upload-hint">JPG, PNG, WebP o PDF — máx. 10 MB</p>
+        <p className="file-upload-hint">JPG, PNG, HEIC, WebP o PDF — máx. 20 MB</p>
       </div>
 
       {file && (
