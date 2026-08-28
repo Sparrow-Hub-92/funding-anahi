@@ -230,7 +230,7 @@ export default function HomePage() {
                       </div>
                     </a>
                   )}
-                  <CapacityBar data={cupos?.['clase-1']} />
+                  {!closed1 && <CapacityBar data={cupos?.['clase-1']} />}
                 </div>
               )
             })()}
@@ -276,7 +276,7 @@ export default function HomePage() {
                       </div>
                     </a>
                   )}
-                  <CapacityBar data={cupos?.['clase-2']} />
+                  {!closed2 && <CapacityBar data={cupos?.['clase-2']} />}
                 </div>
               )
             })()}
