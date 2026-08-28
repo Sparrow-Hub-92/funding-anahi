@@ -189,53 +189,97 @@ export default function HomePage() {
           </div>
 
           <div className="events-grid">
-            {/* Clase 1 — 22 ago */}
-            <div className="event-card-wrapper">
-              <a id="evento-clase1-card" href="/clase/clase-1" className="event-card" aria-label="Inscribirse al taller del 22 de agosto">
-                <Image className="event-card-img" src="/media/promo-01.jpg" alt="Taller 22 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
-                <div className="event-card-overlay" />
-                <div className="event-card-content">
-                  <span className="event-card-tag">Taller 1</span>
-                  <h3 className="event-card-title">Ritmos Mixtos</h3>
-                  <p className="event-card-date">📅 Sáb 22 de agosto · 16:00 a 17:00 · I Dance</p>
-                  <div className="event-card-price">
-                    <strong>$5</strong>
-                    <span>por persona</span>
-                  </div>
-                  <span className="event-card-cta">
-                    Inscríbete
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </span>
+            {/* Clase 1 — 22 ago — cierre: Aug 22 17:00 ECT */}
+            {(() => {
+              const closed1 = new Date() >= new Date('2026-08-22T22:00:00Z')
+              return (
+                <div className="event-card-wrapper">
+                  {closed1 ? (
+                    <div className="event-card event-card--closed" aria-label="Taller 1 cerrado">
+                      <Image className="event-card-img" src="/media/promo-01.jpg" alt="Taller 22 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                      <div className="event-card-overlay" />
+                      <div className="event-card-content">
+                        <span className="event-card-tag event-card-tag--closed">Cerrado</span>
+                        <h3 className="event-card-title">Ritmos Mixtos</h3>
+                        <p className="event-card-date">📅 Sáb 22 de agosto · 16:00 a 17:00 · I Dance</p>
+                        <div className="event-card-price">
+                          <strong>$5</strong>
+                          <span>por persona</span>
+                        </div>
+                        <span className="event-card-cta event-card-cta--closed">Inscripciones cerradas</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <a id="evento-clase1-card" href="/clase/clase-1" className="event-card" aria-label="Inscribirse al taller del 22 de agosto">
+                      <Image className="event-card-img" src="/media/promo-01.jpg" alt="Taller 22 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                      <div className="event-card-overlay" />
+                      <div className="event-card-content">
+                        <span className="event-card-tag">Taller 1</span>
+                        <h3 className="event-card-title">Ritmos Mixtos</h3>
+                        <p className="event-card-date">📅 Sáb 22 de agosto · 16:00 a 17:00 · I Dance</p>
+                        <div className="event-card-price">
+                          <strong>$5</strong>
+                          <span>por persona</span>
+                        </div>
+                        <span className="event-card-cta">
+                          Inscríbete
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
+                        </span>
+                      </div>
+                    </a>
+                  )}
+                  <CapacityBar data={cupos?.['clase-1']} />
                 </div>
-              </a>
-              <CapacityBar data={cupos?.['clase-1']} />
-            </div>
+              )
+            })()}
 
-            {/* Clase 2 — 29 ago */}
-            <div className="event-card-wrapper">
-              <a id="evento-clase2-card" href="/clase/clase-2" className="event-card" aria-label="Inscribirse al taller del 29 de agosto">
-                <Image className="event-card-img" src="/media/promo-02.jpg" alt="Taller 29 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
-                <div className="event-card-overlay" />
-                <div className="event-card-content">
-                  <span className="event-card-tag">Taller 2</span>
-                  <h3 className="event-card-title">Ritmos Mixtos</h3>
-                  <p className="event-card-date">📅 Sáb 29 de agosto · 16:00 a 17:00 · I Dance</p>
-                  <div className="event-card-price">
-                    <strong>$5</strong>
-                    <span>por persona</span>
-                  </div>
-                  <span className="event-card-cta">
-                    Inscríbete
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                  </span>
+            {/* Clase 2 — 29 ago — cierre: domingo Aug 31 00:00 ECT */}
+            {(() => {
+              const closed2 = new Date() >= new Date('2026-08-31T05:00:00Z')
+              return (
+                <div className="event-card-wrapper">
+                  {closed2 ? (
+                    <div className="event-card event-card--closed" aria-label="Taller 2 cerrado">
+                      <Image className="event-card-img" src="/media/promo-02.jpg" alt="Taller 29 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                      <div className="event-card-overlay" />
+                      <div className="event-card-content">
+                        <span className="event-card-tag event-card-tag--closed">Cerrado</span>
+                        <h3 className="event-card-title">Ritmos Mixtos</h3>
+                        <p className="event-card-date">📅 Sáb 29 de agosto · 16:00 a 17:00 · I Dance</p>
+                        <div className="event-card-price">
+                          <strong>$5</strong>
+                          <span>por persona</span>
+                        </div>
+                        <span className="event-card-cta event-card-cta--closed">Inscripciones cerradas</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <a id="evento-clase2-card" href="/clase/clase-2" className="event-card" aria-label="Inscribirse al taller del 29 de agosto">
+                      <Image className="event-card-img" src="/media/promo-02.jpg" alt="Taller 29 de agosto" fill style={{ objectFit: 'cover', objectPosition: 'center 20%' }} />
+                      <div className="event-card-overlay" />
+                      <div className="event-card-content">
+                        <span className="event-card-tag">Taller 2</span>
+                        <h3 className="event-card-title">Ritmos Mixtos</h3>
+                        <p className="event-card-date">📅 Sáb 29 de agosto · 16:00 a 17:00 · I Dance</p>
+                        <div className="event-card-price">
+                          <strong>$5</strong>
+                          <span>por persona</span>
+                        </div>
+                        <span className="event-card-cta">
+                          Inscríbete
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                          </svg>
+                        </span>
+                      </div>
+                    </a>
+                  )}
+                  <CapacityBar data={cupos?.['clase-2']} />
                 </div>
-              </a>
-              <CapacityBar data={cupos?.['clase-2']} />
-            </div>
+              )
+            })()}
           </div>
         </div>
       </section>

@@ -35,6 +35,8 @@ const CLASES: Record<
     precio: number
     imagen: string
     descripcion: string
+    // ISO timestamp (UTC) after which registrations are blocked
+    cierreVenta: string
   }
 > = {
   'clase-1': {
@@ -48,6 +50,8 @@ const CLASES: Record<
     imagen: '/media/promo-01.jpg',
     descripcion:
       'Una clase especial de ritmos mixtos donde vivirás la energía del baile junto a nuestros bailarines. Todo lo recaudado va directo al fondo para ir a la PLF Latin Dance World Competition en Perú.',
+    // Taller 1 was Aug 22 — closed immediately (set to day-of event end, ECT = UTC-5)
+    cierreVenta: '2026-08-22T22:00:00Z', // 17:00 ECT = 22:00 UTC
   },
   'clase-2': {
     titulo: 'Taller 2: Ritmos Mixtos',
@@ -60,6 +64,8 @@ const CLASES: Record<
     imagen: '/media/promo-02.jpg',
     descripcion:
       'Una tarde llena de movimiento, música y alegría. Aprende ritmos mixtos con nuestros instructores y apoya el sueño de estos bailarines de llegar a la PLF Latin Dance World Competition.',
+    // Taller 2 closes Sunday Aug 31 at midnight ECT (05:00 UTC)
+    cierreVenta: '2026-08-31T05:00:00Z',
   },
 }
 
@@ -332,6 +338,9 @@ export default function ClasePage() {
     )
   }
 
+  // ── Ventas cerradas ───────────────────────────────────────────────────────
+  const ventasCerradas = new Date() >= new Date(clase.cierreVenta)
+
   const monto = clase.precio * cantidad
 
   const cuposPorBailarina = cupos?.cuposBailarina ?? {}
@@ -466,7 +475,14 @@ export default function ClasePage() {
           </div>
         )}
 
-        {cupos && (
+        {ventasCerradas ? (
+          <div className="closed-notice">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/>
+            </svg>
+            <span>Las inscripciones para este taller han cerrado.</span>
+          </div>
+        ) : cupos && (
           <div className="form-cupos">
             <div className="form-cupos-header">
               <span className="form-cupos-count">
@@ -552,6 +568,7 @@ export default function ClasePage() {
           </div>
         </div>
 
+        {!ventasCerradas && (
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-card">
 
@@ -704,6 +721,7 @@ export default function ClasePage() {
             </p>
           </div>
         </form>
+        )}
       </div>
     </div>
   )
