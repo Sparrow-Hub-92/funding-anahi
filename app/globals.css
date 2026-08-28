@@ -553,7 +553,9 @@ h1, h2, h3 {
   display: block;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 16/10;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
   cursor: default;
   filter: grayscale(60%);
   opacity: 0.82;
